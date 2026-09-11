@@ -233,11 +233,6 @@ button:hover { opacity: 0.9; }
     min-width: 120px;
 }
 
-tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-}
-
 @media (max-width: 768px) {
     body { padding: 0; }
     .page { padding: 8px; }
@@ -324,6 +319,7 @@ tr {
     .actions, .delete-btn, .submit-section, .clear-btn { display: none !important; }
     input, select, textarea { border: none; box-shadow: none; }
     .signature-pad { border: 1px solid #777; }
+    tr { page-break-inside: avoid; }
 }
 
 .save-status {
@@ -446,7 +442,7 @@ tr {
     </div>
 
     <div class="submit-section">
-        <button type="button" class="submit-btn" onclick="submitForm()">Save PDF to Local Drive</button>
+        <button type="button" class="submit-btn" onclick="submitForm()">Save Local PDF</button>
         <div id="saveStatus" class="save-status"></div>
     </div>
 </div>
@@ -553,7 +549,7 @@ async function submitForm() {
     });
 
     if (!valid) {
-        showSaveStatus("Please complete all required fields before saving.", "error");
+        showSaveStatus("Please complete all required fields before submitting.", "error");
         return;
     }
 
@@ -576,7 +572,7 @@ async function submitForm() {
         pdfHiddenElements.forEach(el => el.style.display = "none");
 
         const pdfElement = document.getElementById("pdf-content");
-        
+
         await html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
@@ -584,13 +580,14 @@ async function submitForm() {
                 image: { type: "jpeg", quality: 0.95 },
                 html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-                pagebreak: { mode: ['css', 'legacy'] }
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
             .from(pdfElement)
             .save();
 
         pdfHiddenElements.forEach(el => el.style.display = "");
-        showSaveStatus("✓ PDF downloaded to local drive successfully.", "success");
+
+        showSaveStatus("✓ PDF downloaded successfully.", "success");
         setTimeout(resetFormFields, 1500);
 
     } catch (error) {
@@ -599,7 +596,7 @@ async function submitForm() {
         const pdfHiddenElements = document.querySelectorAll(".actions, .submit-section, .delete-btn, .clear-btn");
         pdfHiddenElements.forEach(el => el.style.display = "");
         submitButton.disabled = false;
-        submitButton.textContent = "Save PDF to Local Drive";
+        submitButton.textContent = "Save Local PDF";
     }
 }
 
