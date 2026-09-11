@@ -246,6 +246,20 @@ button:hover { opacity: 0.9; }
     white-space: pre-wrap;
 }
 
+body.pdf-generating {
+    width: 1024px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.pdf-generating .page {
+    max-width: 1024px !important;
+    width: 1024px !important;
+    margin: 0 !important;
+    padding: 15px !important;
+}
+
 body.pdf-generating .pdf-display-val {
     display: block !important;
 }
@@ -581,7 +595,11 @@ function syncInputsForPdf() {
     document.querySelectorAll("canvas").forEach(canvas => {
         const img = canvas.parentElement.querySelector(".signature-img");
         if (img) {
-            img.src = canvas.toDataURL("image/png");
+            try {
+                img.src = canvas.toDataURL("image/png");
+            } catch (e) {
+                console.error("Signature export failed:", e);
+            }
         }
     });
 }
@@ -627,8 +645,14 @@ async function submitForm() {
         submitButton.textContent = "Generating PDF...";
         showSaveStatus("Generating PDF and saving locally. Please wait...", "success");
 
+        // Reset mobile window scroll position to avoid top whitespace rendering
+        window.scrollTo(0, 0);
+
         syncInputsForPdf();
         document.body.classList.add("pdf-generating");
+
+        // Short timeout allows mobile browsers to update DOM/images before canvas snapshot
+        await new Promise(resolve => setTimeout(resolve, 250));
 
         const projectVal = document.getElementById("project").value.trim() || "Scaffold_Record";
         const safeProjectName = projectVal.replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 80);
@@ -644,8 +668,15 @@ async function submitForm() {
             .set({
                 margin: [5, 5, 5, 5],
                 filename: filename,
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0, scrollX: 0 },
+                image: { type: "jpeg", quality: 0.95 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    backgroundColor: "#ffffff", 
+                    scrollY: 0, 
+                    scrollX: 0,
+                    windowWidth: 1024
+                },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
