@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Scaffold Checklist</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 10px; background: #f3f3f3;
+    font-family: Arial, Helvetica, sans-serif; color: #222;
+}
+.page {
+    max-width: 1200px; margin: 0 auto; background: #fff;
+    padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,.12);
+}
+h1 { margin: 0 0 10px; font-size: 22px; text-align: left; }
+.note { font-size: 11px; line-height: 1.3; color: #555; margin: 0 0 12px; }
+.info-table, .checklist-table, .ack-table {
+    width: 100%; border-collapse: collapse; table-layout: fixed;
+}
+.info-table { margin-bottom: 12px; }
+.info-table td, .checklist-table th, .checklist-table td, .ack-table td {
+    border: 1px solid #777; padding: 4px 6px; vertical-align: middle; word-wrap: break-word;
+}
+.label { width: 15%; background: #eee; font-weight: bold; white-space: nowrap; font-size: 11px; }
+.value { width: 35%; }
+input[type="text"], input[type="date"], input[type="datetime-local"], textarea {
+    width: 100%; padding: 4px; border: 1px solid #bbb; border-radius: 3px;
+    font: inherit; background: #fff; font-size: 11px;
+}
+textarea { resize: vertical; }
+.section-title { font-size: 14px; font-weight: bold; margin: 10px 0 6px; }
+.checklist-wrap { width: 100%; }
+.checklist-table { width: 100%; }
+.checklist-table th {
+    background: #e9e9e9; text-align: center; font-size: 11px; padding: 4px;
+}
+.checklist-table td { font-size: 11px; padding: 3px 5px; }
+.checklist-table .no { width: 5%; text-align: center; }
+.checklist-table .question { width: 53%; line-height: 1.2; }
+.checklist-table .choice { width: 5%; text-align: center; }
+.checklist-table th:nth-child(6), .checklist-table td:nth-child(6) { width: 27%; }
+.choice input { transform: scale(1); margin: 0; }
+.ack-section { margin-top: 12px; }
+.ack-table { max-width: 450px; }
+.ack-label { width: 30%; background: #eee; font-weight: bold; font-size: 11px; }
+.signature-pad {
+    width: 100%; height: 65px; border: 1px solid #bbb; background: #fff;
+    touch-action: none; cursor: crosshair; display: block;
+}
+.clear-btn {
+    margin-top: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer;
+}
+.buttons {
+    display: flex; justify-content: flex-end; margin-top: 15px;
+}
+.submit-btn {
+    background: #1677c8; color: white; border: 0; border-radius: 4px;
+    padding: 10px 24px; font-size: 14px; cursor: pointer;
+}
+.submit-btn:hover { background: #0d5fa5; }
+.status { margin-top: 8px; text-align: right; font-size: 12px; }
+
+@media (max-width: 768px) {
+    body { padding: 0; }
+    .page { padding: 8px; }
+    
+    .info-table td, .checklist-table th, .checklist-table td, .ack-table td {
+        padding: 3px 2px;
+        font-size: 10px;
+    }
+    
+    .info-table .label { width: 25%; }
+    .info-table .value { width: 25%; }
+
+    .checklist-table .no { width: 8%; }
+    .checklist-table .question { width: 44%; }
+    .checklist-table .choice { width: 8%; }
+    .checklist-table th:nth-child(6), .checklist-table td:nth-child(6) { width: 24%; }
+
+    input[type="text"], input[type="date"], input[type="datetime-local"], textarea {
+        padding: 2px;
+        font-size: 10px;
+    }
+    
+    .checklist-table textarea { height: 28px; }
+    .ack-table { max-width: 100%; }
+}
+
+@media print {
+    body { background: white; padding: 0; margin: 0; }
+    .page { box-shadow: none; max-width: none; padding: 0; margin: 0; }
+    .buttons, .status, .clear-btn { display: none; }
+    input, textarea { border: none; }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+<div class="page" id="pdf-content">
+    <h1>Weekly Scaffold Checklist</h1>
+
+    <table class="info-table">
+        <tr>
+            <td class="label">Company:</td>
+            <td class="value"><input id="company" type="text" required></td>
+            <td class="label">Trade of Work:</td>
+            <td class="value"><input id="tradeOfWork" type="text" required></td>
+        </tr>
+        <tr>
+            <td class="label">Project:</td>
+            <td class="value"><input id="project" type="text" required></td>
+            <td class="label">Date &amp; Time:</td>
+            <td class="value"><input id="dateTime" type="datetime-local" required></td>
+        </tr>
+        <tr>
+            <td class="label">Location:</td>
+            <td class="value"><input id="location" type="text" required></td>
+            <td class="label">Height of Scaffold:</td>
+            <td class="value"><input id="height" type="text" required></td>
+        </tr>
+        <tr>
+            <td class="label">Inspected by:</td>
+            <td class="value" colspan="3"><input id="inspectedBy" type="text" required></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Checklist</div>
+
+    <div class="checklist-wrap">
+        <table class="checklist-table">
+            <thead>
+                <tr>
+                    <th class="no">S/No.</th>
+                    <th class="question">Checklist</th>
+                    <th class="choice">Yes</th>
+                    <th class="choice">No</th>
+                    <th class="choice">N/A</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="no">1</td>
+                    <td class="question">Is the ground where the scaffold is to be erected firm and not water-logged?</td>
+                    <td class="choice"><input type="radio" name="q1" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q1" value="No"></td>
+                    <td class="choice"><input type="radio" name="q1" value="N/A"></td>
+                    <td><textarea name="remarks1" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">2</td>
+                    <td class="question">Have any open excavation near to the scaffold which may endanger its stability or access to it, been noted and allowed for?</td>
+                    <td class="choice"><input type="radio" name="q2" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q2" value="No"></td>
+                    <td class="choice"><input type="radio" name="q2" value="N/A"></td>
+                    <td><textarea name="remarks2" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">3</td>
+                    <td class="question">Have precautions been taken to allow for any possible future excavations which may endanger the scaffold or access to it?</td>
+                    <td class="choice"><input type="radio" name="q3" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q3" value="No"></td>
+                    <td class="choice"><input type="radio" name="q3" value="N/A"></td>
+                    <td><textarea name="remarks3" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">4</td>
+                    <td class="question">Have any overhead hazards such as power transmission lines, telephone wires, etc., in the vicinity of the scaffold been noted and allowed for?</td>
+                    <td class="choice"><input type="radio" name="q4" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q4" value="No"></td>
+                    <td class="choice"><input type="radio" name="q4" value="N/A"></td>
+                    <td><textarea name="remarks4" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">5</td>
+                    <td class="question">Do you know the purpose for which the scaffold is to be used Is it for: A. Light duty? B. Medium duty? C. Heavy duty?</td>
+                    <td class="choice"><input type="radio" name="q5" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q5" value="No"></td>
+                    <td class="choice"><input type="radio" name="q5" value="N/A"></td>
+                    <td><textarea name="remarks5" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">6</td>
+                    <td class="question">Are the erectors wearing safety helmets that cannot slip whilst being worn?</td>
+                    <td class="choice"><input type="radio" name="q6" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q6" value="No"></td>
+                    <td class="choice"><input type="radio" name="q6" value="N/A"></td>
+                    <td><textarea name="remarks6" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">7</td>
+                    <td class="question">Are the erectors supplied with personal safety protection devices like safety harness, life line, etc., and do they use the devices?</td>
+                    <td class="choice"><input type="radio" name="q7" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q7" value="No"></td>
+                    <td class="choice"><input type="radio" name="q7" value="N/A"></td>
+                    <td><textarea name="remarks7" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">8</td>
+                    <td class="question">Is there a qualified scaffold supervisor around to supervise the erection of the scaffold?</td>
+                    <td class="choice"><input type="radio" name="q8" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q8" value="No"></td>
+                    <td class="choice"><input type="radio" name="q8" value="N/A"></td>
+                    <td><textarea name="remarks8" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">9</td>
+                    <td class="question">Have warning notices stating “CAUTION: DO NOT USE THE SCAFFOLD” been fixed in prominent positions while erection is in progress?</td>
+                    <td class="choice"><input type="radio" name="q9" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q9" value="No"></td>
+                    <td class="choice"><input type="radio" name="q9" value="N/A"></td>
+                    <td><textarea name="remarks9" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">10</td>
+                    <td class="question">Are you familiar with the requirements of this Code of Practice, the WSH Act 2006, WSH (Construction) Regulation 2007, WSH (Scaffold) Regulations 2011?</td>
+                    <td class="choice"><input type="radio" name="q10" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q10" value="No"></td>
+                    <td class="choice"><input type="radio" name="q10" value="N/A"></td>
+                    <td><textarea name="remarks10" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">11</td>
+                    <td class="question">Where the scaffold is not erected onto a solid foundation, have sole-plates been placed and are they of the correct thickness and lengths?</td>
+                    <td class="choice"><input type="radio" name="q11" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q11" value="No"></td>
+                    <td class="choice"><input type="radio" name="q11" value="N/A"></td>
+                    <td><textarea name="remarks11" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">12</td>
+                    <td class="question">Have all standards been fitted with baseplates?</td>
+                    <td class="choice"><input type="radio" name="q12" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q12" value="No"></td>
+                    <td class="choice"><input type="radio" name="q12" value="N/A"></td>
+                    <td><textarea name="remarks12" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">13</td>
+                    <td class="question">Have foot-ties been fitted as near to the ground or basing level as possible?</td>
+                    <td class="choice"><input type="radio" name="q13" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q13" value="No"></td>
+                    <td class="choice"><input type="radio" name="q13" value="N/A"></td>
+                    <td><textarea name="remarks13" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">14</td>
+                    <td class="question">Are the standards placed at their correct distances from each other and from the structure they are servicing?</td>
+                    <td class="choice"><input type="radio" name="q14" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q14" value="No"></td>
+                    <td class="choice"><input type="radio" name="q14" value="N/A"></td>
+                    <td><textarea name="remarks14" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">15</td>
+                    <td class="question">Are standards plumb but a slight lean-in towards the structure they are servicing?</td>
+                    <td class="choice"><input type="radio" name="q15" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q15" value="No"></td>
+                    <td class="choice"><input type="radio" name="q15" value="N/A"></td>
+                    <td><textarea name="remarks15" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">16</td>
+                    <td class="question">Are connections between standards and ledgers made with right-angle couplers?</td>
+                    <td class="choice"><input type="radio" name="q16" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q16" value="No"></td>
+                    <td class="choice"><input type="radio" name="q16" value="N/A"></td>
+                    <td><textarea name="remarks16" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">17</td>
+                    <td class="question">Are transoms at standards connected whether to the standards or to the ledgers with right-angle couplers?</td>
+                    <td class="choice"><input type="radio" name="q17" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q17" value="No"></td>
+                    <td class="choice"><input type="radio" name="q17" value="N/A"></td>
+                    <td><textarea name="remarks17" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">18</td>
+                    <td class="question">Are diagonal bracings connected either to projecting transoms with right-angle couplers or to the standards with swivel couplers? Note: Do not connect diagonal bracing to ledgers.</td>
+                    <td class="choice"><input type="radio" name="q18" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q18" value="No"></td>
+                    <td class="choice"><input type="radio" name="q18" value="N/A"></td>
+                    <td><textarea name="remarks18" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">19</td>
+                    <td class="question">Are ledgers bracings connected to the ledgers with right-angle couplers or to the standards with swivel couplers?</td>
+                    <td class="choice"><input type="radio" name="q19" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q19" value="No"></td>
+                    <td class="choice"><input type="radio" name="q19" value="N/A"></td>
+                    <td><textarea name="remarks19" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">20</td>
+                    <td class="question">Are fittings at standards grouped as closely together as possible?</td>
+                    <td class="choice"><input type="radio" name="q20" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q20" value="No"></td>
+                    <td class="choice"><input type="radio" name="q20" value="N/A"></td>
+                    <td><textarea name="remarks20" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">21</td>
+                    <td class="question">Are tie-ins of correct design being fixed in correct positions as the scaffold rises and not more than two lifts behind?</td>
+                    <td class="choice"><input type="radio" name="q21" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q21" value="No"></td>
+                    <td class="choice"><input type="radio" name="q21" value="N/A"></td>
+                    <td><textarea name="remarks21" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">22</td>
+                    <td class="question">Are ledgers and transoms truly horizontal and correctly spaced, particularly at decking-out level?</td>
+                    <td class="choice"><input type="radio" name="q22" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q22" value="No"></td>
+                    <td class="choice"><input type="radio" name="q22" value="N/A"></td>
+                    <td><textarea name="remarks22" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">23</td>
+                    <td class="question">Are timber boards for decking-out of correct thickness, length and width for the intended purpose of the scaffold?</td>
+                    <td class="choice"><input type="radio" name="q23" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q23" value="No"></td>
+                    <td class="choice"><input type="radio" name="q23" value="N/A"></td>
+                    <td><textarea name="remarks23" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">24</td>
+                    <td class="question">Are the boards laid close together side-by-side and butting close to each other to make a level deck?</td>
+                    <td class="choice"><input type="radio" name="q24" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q24" value="No"></td>
+                    <td class="choice"><input type="radio" name="q24" value="N/A"></td>
+                    <td><textarea name="remarks24" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">25</td>
+                    <td class="question">If over-lapping boards are used, are the over-laps at least 300mm and fillet pieces fitted of adequate cross-section so that the change in level is gradual?</td>
+                    <td class="choice"><input type="radio" name="q25" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q25" value="No"></td>
+                    <td class="choice"><input type="radio" name="q25" value="N/A"></td>
+                    <td><textarea name="remarks25" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">26</td>
+                    <td class="question">Do the boards over-sail their last support by more than four-times their thickness or not less than 50mm?</td>
+                    <td class="choice"><input type="radio" name="q26" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q26" value="No"></td>
+                    <td class="choice"><input type="radio" name="q26" value="N/A"></td>
+                    <td><textarea name="remarks26" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">27</td>
+                    <td class="question">Are precautions being taken to hold down decking against high winds?</td>
+                    <td class="choice"><input type="radio" name="q27" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q27" value="No"></td>
+                    <td class="choice"><input type="radio" name="q27" value="N/A"></td>
+                    <td><textarea name="remarks27" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">28</td>
+                    <td class="question">Are toeboards provided and securely fastened in position?</td>
+                    <td class="choice"><input type="radio" name="q28" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q28" value="No"></td>
+                    <td class="choice"><input type="radio" name="q28" value="N/A"></td>
+                    <td><textarea name="remarks28" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">29</td>
+                    <td class="question">Are guardrails fitted and connected to standards?</td>
+                    <td class="choice"><input type="radio" name="q29" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q29" value="No"></td>
+                    <td class="choice"><input type="radio" name="q29" value="N/A"></td>
+                    <td><textarea name="remarks29" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">30</td>
+                    <td class="question">Are ledgers and diagonal bracings connected end-to-end using either sleeve couplers or joint-pins with butt-straps?</td>
+                    <td class="choice"><input type="radio" name="q30" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q30" value="No"></td>
+                    <td class="choice"><input type="radio" name="q30" value="N/A"></td>
+                    <td><textarea name="remarks30" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">31</td>
+                    <td class="question">Are standards connected end-to-end with either sleeve couplers or joint pins?</td>
+                    <td class="choice"><input type="radio" name="q31" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q31" value="No"></td>
+                    <td class="choice"><input type="radio" name="q31" value="N/A"></td>
+                    <td><textarea name="remarks31" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">32</td>
+                    <td class="question">Are end-to-end connections in members staggered in adjacent bays and adjacent pairs so that joints in similar members do not occur close together?</td>
+                    <td class="choice"><input type="radio" name="q32" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q32" value="No"></td>
+                    <td class="choice"><input type="radio" name="q32" value="N/A"></td>
+                    <td><textarea name="remarks32" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">33</td>
+                    <td class="question">If the scaffold is erected over a public access has a safety net of close-mesh wire or a fan of boards been erected to prevent articles and debris dislodged from the scaffold falling on to the public access?</td>
+                    <td class="choice"><input type="radio" name="q33" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q33" value="No"></td>
+                    <td class="choice"><input type="radio" name="q33" value="N/A"></td>
+                    <td><textarea name="remarks33" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">34</td>
+                    <td class="question">Are ladders provided to give access to every working platform?</td>
+                    <td class="choice"><input type="radio" name="q34" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q34" value="No"></td>
+                    <td class="choice"><input type="radio" name="q34" value="N/A"></td>
+                    <td><textarea name="remarks34" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">35</td>
+                    <td class="question">Are the ladders rising not more than 9m vertically between landings?</td>
+                    <td class="choice"><input type="radio" name="q35" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q35" value="No"></td>
+                    <td class="choice"><input type="radio" name="q35" value="N/A"></td>
+                    <td><textarea name="remarks35" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">36</td>
+                    <td class="question">Are the ladders projecting at least 1m above the level of the landing?</td>
+                    <td class="choice"><input type="radio" name="q36" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q36" value="No"></td>
+                    <td class="choice"><input type="radio" name="q36" value="N/A"></td>
+                    <td><textarea name="remarks36" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">37</td>
+                    <td class="question">Are the ladders securely lashed to the scaffold at top and bottom so that no accidental displacement can take place?</td>
+                    <td class="choice"><input type="radio" name="q37" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q37" value="No"></td>
+                    <td class="choice"><input type="radio" name="q37" value="N/A"></td>
+                    <td><textarea name="remarks37" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">38</td>
+                    <td class="question">Are the ladders firmly supported at their base so that no settlement can take place?</td>
+                    <td class="choice"><input type="radio" name="q38" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q38" value="No"></td>
+                    <td class="choice"><input type="radio" name="q38" value="N/A"></td>
+                    <td><textarea name="remarks38" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">39</td>
+                    <td class="question">Is the angle of the ladder approximately four units vertically to one unit horizontally?</td>
+                    <td class="choice"><input type="radio" name="q39" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q39" value="No"></td>
+                    <td class="choice"><input type="radio" name="q39" value="N/A"></td>
+                    <td><textarea name="remarks39" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">40</td>
+                    <td class="question">Is the scaffold connected to any other temporary structure?</td>
+                    <td class="choice"><input type="radio" name="q40" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q40" value="No"></td>
+                    <td class="choice"><input type="radio" name="q40" value="N/A"></td>
+                    <td><textarea name="remarks40" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">41</td>
+                    <td class="question">Has a Professional Engineer been consulted on whether the removal of the connecting temporary structure will affect the strength or stability of the scaffold?</td>
+                    <td class="choice"><input type="radio" name="q41" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q41" value="No"></td>
+                    <td class="choice"><input type="radio" name="q41" value="N/A"></td>
+                    <td><textarea name="remarks41" rows="1"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="no">42</td>
+                    <td class="question">Have any hazards that may affect workers on the scaffold been noted?</td>
+                    <td class="choice"><input type="radio" name="q42" value="Yes"></td>
+                    <td class="choice"><input type="radio" name="q42" value="No"></td>
+                    <td class="choice"><input type="radio" name="q42" value="N/A"></td>
+                    <td><textarea name="remarks42" rows="1"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">Remarks</div>
+    <textarea id="generalRemarks" rows="3"></textarea>
+
+    <div class="ack-section">
+        <table class="ack-table">
+            <tr>
+                <td colspan="2" style="background: #eee; font-weight: bold;">Acknowledged by (Main Contractor)</td>
+            </tr>
+            <tr>
+                <td class="ack-label">Signature:</td>
+                <td>
+                    <canvas id="signaturePad" class="signature-pad"></canvas>
+                    <button type="button" class="clear-btn" onclick="clearsignaturePad()">Clear</button>
+                </td>
+            </tr>
+            <tr>
+                <td class="ack-label">Name:</td>
+                <td><input id="ackName" type="text"></td>
+            </tr>
+            <tr>
+                <td class="ack-label">Designation:</td>
+                <td><input id="designation" type="text"></td>
+            </tr>
+            <tr>
+                <td class="ack-label">Date:</td>
+                <td><input id="ackDate" type="date"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="buttons">
+        <button class="submit-btn" type="button" onclick="saveAsPDF()">Save as PDF</button>
+    </div>
+    <div id="status" class="status"></div>
+</div>
+
+<script>
+function setupSignaturePad() {
+    const canvas = document.getElementById("signaturePad");
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+
+    const ctx = canvas.getContext("2d");
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#111";
+    let drawing = false;
+
+    function pos(e) {
+        const r = canvas.getBoundingClientRect();
+        const p = e.touches ? e.touches[0] : e;
+        return { x: p.clientX - r.left, y: p.clientY - r.top };
+    }
+
+    function start(e) {
+        e.preventDefault(); drawing = true;
+        const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y);
+    }
+    function draw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+    }
+    function stop(e) { if (e) e.preventDefault(); drawing = false; }
+
+    canvas.addEventListener("mousedown", start);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stop);
+    canvas.addEventListener("mouseleave", stop);
+    canvas.addEventListener("touchstart", start, {passive:false});
+    canvas.addEventListener("touchmove", draw, {passive:false});
+    canvas.addEventListener("touchend", stop, {passive:false});
+}
+
+function clearsignaturePad() {
+    const canvas = document.getElementById("signaturePad");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+async function saveAsPDF() {
+    const required = document.querySelectorAll("[required]");
+    let ok = true;
+
+    required.forEach(el => {
+        const value = el.value.trim();
+        el.style.borderColor = value ? "#bbb" : "#b42318";
+        if (!value) ok = false;
+    });
+
+    const status = document.getElementById("status");
+
+    if (!ok) {
+        status.textContent = "Please complete all required fields.";
+        status.style.color = "#b42318";
+        return;
+    }
+
+    const button = document.querySelector(".submit-btn");
+    button.disabled = true;
+    button.textContent = "Generating PDF...";
+
+    // Reset mobile window scroll position to avoid top whitespace rendering
+    window.scrollTo(0, 0);
+
+    const company = document.getElementById("company").value.trim();
+    const project = document.getElementById("project").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const dateTime = document.getElementById("dateTime").value;
+
+    const datePart = dateTime ? dateTime.substring(0, 10) : new Date().toISOString().substring(0, 10);
+
+    const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
+
+    const filename = `Weekly_Scaffold_Checklist_${safe(company) || "Company"}_${safe(project) || "Project"}_${safe(location) || "Location"}_${datePart}.pdf`;
+    const page = document.getElementById("pdf-content");
+
+    const hideElements = document.querySelectorAll(".buttons, .status, .clear-btn");
+    hideElements.forEach(el => el.style.display = "none");
+
+    try {
+        const opt = {
+            margin: [5, 5, 5, 5],
+            filename: filename,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
+            jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        await html2pdf().set(opt).from(page).save();
+
+        status.textContent = "✓ PDF generated and downloaded successfully.";
+        status.style.color = "#176b35";
+    } catch (error) {
+        status.textContent = "Error: " + error.message;
+        status.style.color = "#b42318";
+    } finally {
+        hideElements.forEach(el => el.style.display = "");
+        button.disabled = false;
+        button.textContent = "Save as PDF";
+    }
+}
+
+window.addEventListener("DOMContentLoaded", setupSignaturePad);
+</script>
+</body>
+</html>
