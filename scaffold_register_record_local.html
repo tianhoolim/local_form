@@ -122,6 +122,12 @@ input:focus, select:focus, textarea:focus {
     cursor: crosshair;
     display: block;
 }
+.signature-img {
+    display: none;
+    max-width: 100%;
+    height: 40px;
+    object-fit: contain;
+}
 .row-number {
     text-align: center;
     font-weight: bold;
@@ -233,7 +239,6 @@ button:hover { opacity: 0.9; }
     min-width: 120px;
 }
 
-/* Printable PDF Print Styling */
 .pdf-display-val {
     display: none;
     font-size: 11px;
@@ -245,6 +250,10 @@ body.pdf-generating .pdf-display-val {
     display: block !important;
 }
 
+body.pdf-generating .signature-img {
+    display: block !important;
+}
+
 body.pdf-generating input,
 body.pdf-generating textarea,
 body.pdf-generating select,
@@ -253,12 +262,9 @@ body.pdf-generating .clear-btn,
 body.pdf-generating .delete-btn,
 body.pdf-generating .submit-section,
 body.pdf-generating .col-delete,
-body.pdf-generating .status-options {
-    display: none !important;
-}
-
+body.pdf-generating .status-options,
 body.pdf-generating .signature-pad {
-    border: 1px solid #777;
+    display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -441,6 +447,7 @@ body.pdf-generating .signature-pad {
                         <div class="supervisor-signature-container">
                             <label>Signature:</label>
                             <canvas id="supervisorSignature" class="signature-pad supervisor-signature"></canvas>
+                            <img id="supervisorSignatureImg" class="signature-img" alt="Signature">
                             <button type="button" class="clear-btn" onclick="clearSupervisorSignature()">Clear Signature</button>
                         </div>
                     </div>
@@ -460,14 +467,13 @@ body.pdf-generating .signature-pad {
     </div>
 
     <div class="submit-section">
-        <button type="button" class="submit-btn" onclick="submitForm()">Save as PDF</button>
+        <button type="button" class="submit-btn" onclick="submitForm()">Save PDF to Local Drive</button>
         <div id="saveStatus" class="save-status"></div>
     </div>
 </div>
 
 <script>
 let inspectionCount = 0;
-let supervisorSignatureState = null;
 
 window.addEventListener("DOMContentLoaded", function () {
     addInspectionRow();
@@ -526,6 +532,7 @@ function addInspectionRow() {
         </td>
         <td>
             <canvas class="signature-pad inspection-signature"></canvas>
+            <img class="signature-img" alt="Signature">
             <button type="button" class="clear-btn" style="margin-top:2px; padding:2px 4px; font-size:8px;" onclick="clearCanvas(this)">Clear</button>
         </td>
         <td class="col-delete">
@@ -568,6 +575,13 @@ function syncInputsForPdf() {
                 if (radio.checked) selectedValue = radio.value;
             });
             pdfSpan.textContent = selectedValue;
+        }
+    });
+
+    document.querySelectorAll("canvas").forEach(canvas => {
+        const img = canvas.parentElement.querySelector(".signature-img");
+        if (img) {
+            img.src = canvas.toDataURL("image/png");
         }
     });
 }
@@ -630,8 +644,8 @@ async function submitForm() {
             .set({
                 margin: [5, 5, 5, 5],
                 filename: filename,
-                image: { type: "jpeg", quality: 0.95 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0, scrollX: 0 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
@@ -657,54 +671,44 @@ function showSaveStatus(message, type) {
     status.style.display = "block";
 }
 
-function prepareCanvas(canvas) {
+function setupCanvas(canvas) {
     const ctx = canvas.getContext("2d");
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width || 300;
+    canvas.height = rect.height || 50;
 
-    function resize() {
-        if (canvas.width === 0 || canvas.offsetWidth !== canvas.width) {
-            const rect = canvas.getBoundingClientRect();
-            const ratio = window.devicePixelRatio || 1;
-            canvas.width = rect.width * ratio || 300;
-            canvas.height = rect.height * ratio || 50;
-            ctx.scale(ratio, ratio);
-            ctx.lineWidth = 2;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            ctx.strokeStyle = "#111";
-        }
-    }
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#111";
 
-    resize();
-    return { canvas, ctx, drawing: false, resize };
-}
+    let drawing = false;
 
-function attachDrawing(canvas, state) {
     function getPosition(event) {
-        const rect = canvas.getBoundingClientRect();
+        const r = canvas.getBoundingClientRect();
         const p = event.touches ? event.touches[0] : event;
-        return { x: p.clientX - rect.left, y: p.clientY - rect.top };
+        return { x: p.clientX - r.left, y: p.clientY - r.top };
     }
 
     function start(event) {
         event.preventDefault();
-        state.resize();
-        state.drawing = true;
+        drawing = true;
         const pos = getPosition(event);
-        state.ctx.beginPath();
-        state.ctx.moveTo(pos.x, pos.y);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
     }
 
     function draw(event) {
-        if (!state.drawing) return;
+        if (!drawing) return;
         event.preventDefault();
         const pos = getPosition(event);
-        state.ctx.lineTo(pos.x, pos.y);
-        state.ctx.stroke();
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
     }
 
     function stop(event) {
         if (event) event.preventDefault();
-        state.drawing = false;
+        drawing = false;
     }
 
     canvas.addEventListener("mousedown", start);
@@ -718,8 +722,7 @@ function attachDrawing(canvas, state) {
 
 function setupRowSignature(row) {
     const canvas = row.querySelector(".inspection-signature");
-    const state = prepareCanvas(canvas);
-    attachDrawing(canvas, state);
+    setupCanvas(canvas);
 }
 
 function clearCanvas(button) {
@@ -730,8 +733,7 @@ function clearCanvas(button) {
 
 function setupSignaturePad() {
     const canvas = document.getElementById("supervisorSignature");
-    supervisorSignatureState = prepareCanvas(canvas);
-    attachDrawing(canvas, supervisorSignatureState);
+    setupCanvas(canvas);
 }
 
 function clearSupervisorSignature() {
