@@ -77,16 +77,22 @@ textarea { resize: vertical; }
 
 body.pdf-generating {
     width: 1024px !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    max-width: 1024px !important;
+    margin: 0 auto !important;
+    padding: 10px !important;
+    overflow: visible !important;
 }
 
 body.pdf-generating .page {
-    max-width: 1024px !important;
-    width: 1024px !important;
-    margin: 0 !important;
-    padding: 15px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+body.pdf-generating table {
+    width: 100% !important;
+    table-layout: fixed !important;
 }
 
 body.pdf-generating .pdf-display-val {
@@ -664,10 +670,9 @@ async function submitForm() {
     const dateTime = document.getElementById("dateTime").value;
 
     const datePart = dateTime ? dateTime.substring(0, 10) : new Date().toISOString().substring(0, 10);
-
     const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
-
     const filename = `Weekly_Scaffold_Checklist_${safe(company) || "Company"}_${safe(project) || "Project"}_${safe(location) || "Location"}_${datePart}.pdf`;
+    
     const page = document.getElementById("pdf-content");
 
     try {
@@ -676,26 +681,27 @@ async function submitForm() {
         syncInputsForPdf();
         document.body.classList.add("pdf-generating");
 
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await new Promise(resolve => setTimeout(resolve, 300));
 
-        await html2pdf()
-            .set({
-                margin: [5, 5, 5, 5],
-                filename: filename,
-                image: { type: "jpeg", quality: 0.95 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    backgroundColor: "#ffffff", 
-                    scrollY: 0,
-                    scrollX: 0,
-                    windowWidth: 1024
-                },
-                jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            })
-            .from(page)
-            .save();
+        const opt = {
+            margin: [5, 5, 5, 5],
+            filename: filename,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: "#ffffff", 
+                scrollY: 0,
+                scrollX: 0,
+                windowWidth: 1024,
+                height: page.scrollHeight,
+                windowHeight: page.scrollHeight
+            },
+            jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+            pagebreak: { mode: ['css', 'legacy'] }
+        };
+
+        await html2pdf().set(opt).from(page).save();
 
         status.textContent = "✓ PDF generated and downloaded successfully.";
         status.style.color = "#176b35";
