@@ -586,6 +586,9 @@ async function saveAsPDF() {
     button.disabled = true;
     button.textContent = "Generating PDF...";
 
+    // Reset mobile window scroll position to avoid top whitespace rendering
+    window.scrollTo(0, 0);
+
     const company = document.getElementById("company").value.trim();
     const project = document.getElementById("project").value.trim();
     const location = document.getElementById("location").value.trim();
