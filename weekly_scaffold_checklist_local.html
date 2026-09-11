@@ -88,6 +88,37 @@ textarea { resize: vertical; }
     .ack-table { max-width: 100%; }
 }
 
+/* Force standard Desktop layout during PDF rendering */
+.pdf-rendering {
+    width: 1100px !important;
+    max-width: none !important;
+    padding: 20px !important;
+    background: #fff !important;
+}
+.pdf-rendering .info-table td, 
+.pdf-rendering .checklist-table th, 
+.pdf-rendering .checklist-table td, 
+.pdf-rendering .ack-table td {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+}
+.pdf-rendering .info-table .label { width: 15% !important; }
+.pdf-rendering .info-table .value { width: 35% !important; }
+.pdf-rendering .checklist-table .no { width: 5% !important; }
+.pdf-rendering .checklist-table .question { width: 53% !important; }
+.pdf-rendering .checklist-table .choice { width: 5% !important; }
+.pdf-rendering .checklist-table th:nth-child(6), 
+.pdf-rendering .checklist-table td:nth-child(6) { width: 27% !important; }
+.pdf-rendering input[type="text"], 
+.pdf-rendering input[type="date"], 
+.pdf-rendering input[type="datetime-local"], 
+.pdf-rendering textarea {
+    font-size: 11px !important;
+    padding: 4px !important;
+    border: 1px solid #bbb !important;
+}
+.pdf-rendering .ack-table { max-width: 450px !important; }
+
 @media print {
     body { background: white; padding: 0; margin: 0; }
     .page { box-shadow: none; max-width: none; padding: 0; margin: 0; }
@@ -601,13 +632,27 @@ async function submitForm() {
     const hideElements = document.querySelectorAll(".buttons, .status, .clear-btn");
     hideElements.forEach(el => el.style.display = "none");
 
+    // Add layout forcing class for mobile PDF generation
+    page.classList.add("pdf-rendering");
+
+    // Convert form elements to static printable values temporarily
+    const inputs = page.querySelectorAll("input[type='text'], input[type='date'], input[type='datetime-local'], textarea");
+    const originalValues = [];
+    inputs.forEach(input => {
+        originalValues.push({ el: input, val: input.value });
+        input.setAttribute("value", input.value);
+        if (input.tagName.toLowerCase() === "textarea") {
+            input.textContent = input.value;
+        }
+    });
+
     try {
         await html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
                 filename: filename,
                 image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", windowWidth: 1200, scrollY: 0 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
@@ -620,6 +665,8 @@ async function submitForm() {
         status.textContent = "Error: " + error.message;
         status.style.color = "#b42318";
     } finally {
+        // Revert temporary rendering layout changes
+        page.classList.remove("pdf-rendering");
         hideElements.forEach(el => el.style.display = "");
         button.disabled = false;
         button.textContent = "Generate PDF";
