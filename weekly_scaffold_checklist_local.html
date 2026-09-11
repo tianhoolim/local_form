@@ -512,7 +512,7 @@ textarea { resize: vertical; }
     </div>
 
     <div class="buttons">
-        <button class="submit-btn" type="button" onclick="submitForm()">Save PDF to Local Drive</button>
+        <button class="submit-btn" type="button" onclick="submitForm()">Share / Save PDF</button>
     </div>
     <div id="status" class="status"></div>
 </div>
@@ -592,37 +592,49 @@ async function submitForm() {
     const dateTime = document.getElementById("dateTime").value;
 
     const datePart = dateTime ? dateTime.substring(0, 10) : new Date().toISOString().substring(0, 10);
-
     const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
-
     const filename = `Weekly_Scaffold_Checklist_${safe(company) || "Company"}_${safe(project) || "Project"}_${safe(location) || "Location"}_${datePart}.pdf`;
-    const page = document.getElementById("pdf-content");
 
+    const page = document.getElementById("pdf-content");
     const hideElements = document.querySelectorAll(".buttons, .status, .clear-btn");
     hideElements.forEach(el => el.style.display = "none");
 
     try {
-        await html2pdf()
+        const worker = html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
-                filename: filename,
                 image: { type: "jpeg", quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
-            .from(page)
-            .save();
+            .from(page);
 
-        status.textContent = "✓ PDF downloaded to local drive successfully.";
-        status.style.color = "#176b35";
+        const pdfBlob = await worker.output('blob');
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+                title: 'Weekly Scaffold Checklist',
+                text: 'Attached is the completed Weekly Scaffold Checklist PDF.',
+                files: [pdfFile]
+            });
+            status.textContent = "✓ PDF shared successfully.";
+            status.style.color = "#176b35";
+        } else {
+            html2pdf().set({ filename: filename }).from(page).save();
+            status.textContent = "✓ Web Share not supported. PDF downloaded to local drive.";
+            status.style.color = "#176b35";
+        }
     } catch (error) {
-        status.textContent = "Error: " + error.message;
-        status.style.color = "#b42318";
+        if (error.name !== 'AbortError') {
+            status.textContent = "Error: " + error.message;
+            status.style.color = "#b42318";
+        }
     } finally {
         hideElements.forEach(el => el.style.display = "");
         button.disabled = false;
-        button.textContent = "Save PDF to Local Drive";
+        button.textContent = "Share / Save PDF";
     }
 }
 
