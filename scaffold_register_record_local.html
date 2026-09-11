@@ -3,1239 +3,592 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Scaffold Register Record</title>
-
 <style>
-
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f3f3f3;
-        margin: 0;
-        padding: 25px;
-        color: #222;
-    }
-
-    .page {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #fff;
-        padding: 35px;
-        box-shadow: 0 2px 10px rgba(0,0,0,.12);
-    }
-
-    h1 {
-        margin: 0 0 8px;
-        font-size: 28px;
-        text-align: left;
-    }
-
-    .intro {
-        font-size: 12px;
-        line-height: 1.5;
-        margin: 0 0 25px;
-        color: #444;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        border: 1px solid #777;
-        padding: 8px;
-        vertical-align: middle;
-    }
-
-
-    /* =========================
-       BASIC INFORMATION
-       ========================= */
-
-    .info-table {
-        margin-bottom: 25px;
-    }
-
-    .info-label {
-        width: 17%;
-        font-weight: bold;
-        background: #f1f1f1;
-        white-space: nowrap;
-    }
-
-    .info-input {
-        width: 33%;
-    }
-
-
-    /* =========================
-       FORM ELEMENTS
-       ========================= */
-
-    input,
-    select,
-    textarea {
-        width: 100%;
-        border: 1px solid #bbb;
-        border-radius: 3px;
-        padding: 7px;
-        font: inherit;
-        background: #fff;
-    }
-
-    textarea {
-        min-height: 70px;
-        resize: vertical;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-        outline: none;
-        border-color: #1677c8;
-        box-shadow: 0 0 0 2px rgba(22,119,200,.12);
-    }
-
-
-    /* =========================
-       SECTION TITLE
-       ========================= */
-
-    .section-title {
-        font-size: 17px;
-        font-weight: bold;
-        margin: 10px 0 10px;
-    }
-
-
-    /* =========================
-       INSPECTION TABLE
-       ========================= */
-
-    .inspection-table {
-        table-layout: fixed;
-    }
-
-    .inspection-table th {
-        background: #e9e9e9;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .inspection-table td {
-        font-size: 12px;
-    }
-
-    .col-no {
-        width: 5%;
-    }
-
-    .col-date {
-        width: 12%;
-    }
-
-    .col-location {
-        width: 17%;
-    }
-
-    .col-status {
-        width: 19%;
-    }
-
-    .col-tag {
-        width: 16%;
-    }
-
-    .col-inspected {
-        width: 16%;
-    }
-
-    .col-signature {
-        width: 15%;
-    }
-
-    .col-delete {
-        width: 5%;
-    }
-
-    .status-options {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        white-space: nowrap;
-    }
-
-    .status-options label {
-        font-size: 11px;
-        font-weight: normal;
-    }
-
-    .status-options input {
-        width: auto;
-        margin-right: 4px;
-    }
-
-    .inspection-table input {
-        font-size: 11px;
-        padding: 5px;
-    }
-
-
-    /* =========================
-       SIGNATURE PAD
-       ========================= */
-
-    .signature-pad {
-        width: 100%;
-        height: 65px;
-        border: 1px solid #bbb;
-        background: #fff;
-        touch-action: none;
-        cursor: crosshair;
-        display: block;
-    }
-
-    .row-number {
-        text-align: center;
-        font-weight: bold;
-        background: #fafafa;
-    }
-
-
-    /* =========================
-       BUTTONS
-       ========================= */
-
-    .actions {
-        display: flex;
-        gap: 10px;
-        margin: 15px 0 25px;
-        flex-wrap: wrap;
-    }
-
-    button {
-        border: 0;
-        border-radius: 4px;
-        padding: 10px 18px;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        opacity: 0.9;
-    }
-
-    .add-btn {
-        background: #1677c8;
-        color: white;
-    }
-
-    .clear-btn {
-        background: #777;
-        color: white;
-    }
-
-    .delete-btn {
-        background: #b42318;
-        color: white;
-        padding: 7px 10px;
-        font-size: 12px;
-    }
-
-
-    /* =========================
-       REMARKS
-       ========================= */
-
-    .remarks-section {
-        margin-top: 30px;
-    }
-
-    .remarks-title {
-        font-size: 14px;
-        font-weight: bold;
-        background: #e9e9e9;
-        border: 1px solid #777;
-        border-bottom: none;
-        padding: 9px;
-    }
-
-    .remarks-box {
-        border: 1px solid #777;
-        padding: 10px;
-    }
-
-    .remarks-box textarea {
-        min-height: 90px;
-        resize: vertical;
-    }
-
-
-    /* =========================
-       SUPERVISOR SECTION
-       ========================= */
-
-    .supervisor-section {
-        margin-top: 25px;
-    }
-
-    .supervisor-table {
-        width: 100%;
-        table-layout: fixed;
-    }
-
-    .supervisor-table td {
-        border: 1px solid #777;
-        padding: 10px;
-        vertical-align: middle;
-    }
-
-    .supervisor-label {
-        width: 22%;
-        font-weight: bold;
-        background: #f1f1f1;
-    }
-
-    .supervisor-content {
-        width: 53%;
-    }
-
-    .datetime-content {
-        width: 25%;
-    }
-
-    .supervisor-inline {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .supervisor-name {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .supervisor-signature-container {
-        flex: 1.2;
-        min-width: 0;
-    }
-
-    .supervisor-name label,
-    .supervisor-signature-container label,
-    .datetime-content label {
-        display: block;
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .supervisor-signature {
-        width: 100%;
-        height: 65px;
-    }
-
-    .supervisor-signature-container .clear-btn {
-        margin-top: 4px;
-        padding: 4px 8px;
+* { box-sizing: border-box; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f3f3;
+    margin: 0;
+    padding: 10px;
+    color: #222;
+}
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.12);
+}
+h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    text-align: left;
+}
+.intro {
+    font-size: 11px;
+    line-height: 1.3;
+    margin: 0 0 12px;
+    color: #444;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #777;
+    padding: 4px 6px;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+.info-table { 
+    margin-bottom: 12px; 
+    table-layout: fixed;
+}
+.info-label {
+    width: 17%;
+    font-size: 11px;
+    font-weight: bold;
+    background: #f1f1f1;
+    white-space: nowrap;
+}
+.info-input { width: 33%; }
+input, select, textarea {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 4px;
+    font: inherit;
+    font-size: 11px;
+    background: #fff;
+}
+textarea {
+    min-height: 50px;
+    resize: vertical;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #1677c8;
+    box-shadow: 0 0 0 2px rgba(22,119,200,.12);
+}
+.section-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0 6px;
+}
+.inspection-table { 
+    width: 100%;
+    table-layout: fixed; 
+}
+.inspection-table th {
+    background: #e9e9e9;
+    text-align: center;
+    font-size: 11px;
+    padding: 4px;
+}
+.inspection-table td { font-size: 11px; padding: 3px 5px; }
+.col-no { width: 5%; }
+.col-date { width: 12%; }
+.col-location { width: 17%; }
+.col-status { width: 19%; }
+.col-tag { width: 16%; }
+.col-inspected { width: 16%; }
+.col-signature { width: 15%; }
+.col-delete { width: 5%; }
+.status-options {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    white-space: nowrap;
+}
+.status-options label {
+    font-size: 10px;
+    font-weight: normal;
+}
+.status-options input {
+    width: auto;
+    margin-right: 3px;
+}
+.inspection-table input {
+    font-size: 11px;
+    padding: 3px;
+}
+.signature-pad {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #bbb;
+    background: #fff;
+    touch-action: none;
+    cursor: crosshair;
+    display: block;
+}
+.row-number {
+    text-align: center;
+    font-weight: bold;
+    background: #fafafa;
+}
+.actions {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0 15px;
+    flex-wrap: wrap;
+}
+button {
+    border: 0;
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+button:hover { opacity: 0.9; }
+.add-btn { background: #1677c8; color: white; }
+.clear-btn { background: #777; color: white; }
+.delete-btn {
+    background: #b42318;
+    color: white;
+    padding: 4px 8px;
+    font-size: 11px;
+}
+.remarks-section { margin-top: 15px; }
+.remarks-title {
+    font-size: 12px;
+    font-weight: bold;
+    background: #e9e9e9;
+    border: 1px solid #777;
+    border-bottom: none;
+    padding: 5px 8px;
+}
+.remarks-box {
+    border: 1px solid #777;
+    padding: 6px;
+}
+.remarks-box textarea {
+    min-height: 45px;
+    resize: vertical;
+}
+.supervisor-section { margin-top: 15px; }
+.supervisor-table {
+    width: 100%;
+    table-layout: fixed;
+}
+.supervisor-table td {
+    border: 1px solid #777;
+    padding: 6px;
+    vertical-align: middle;
+}
+.supervisor-label {
+    width: 22%;
+    font-size: 11px;
+    font-weight: bold;
+    background: #f1f1f1;
+}
+.supervisor-content { width: 53%; }
+.datetime-content { width: 25%; }
+.supervisor-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.supervisor-name {
+    flex: 1;
+    min-width: 0;
+}
+.supervisor-signature-container {
+    flex: 1.2;
+    min-width: 0;
+}
+.supervisor-name label,
+.supervisor-signature-container label,
+.datetime-content label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+.supervisor-signature {
+    width: 100%;
+    height: 50px;
+}
+.supervisor-signature-container .clear-btn {
+    margin-top: 3px;
+    padding: 2px 6px;
+    font-size: 9px;
+}
+.datetime-content input { width: 100%; }
+.footer-note {
+    margin-top: 12px;
+    font-size: 10px;
+    line-height: 1.4;
+    font-style: italic;
+}
+.submit-section {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+.submit-btn {
+    background: #16803c;
+    color: white;
+    min-width: 120px;
+}
+
+/* Printable PDF Print Styling */
+.pdf-display-val {
+    display: none;
+    font-size: 11px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+body.pdf-generating .pdf-display-val {
+    display: block !important;
+}
+
+body.pdf-generating input,
+body.pdf-generating textarea,
+body.pdf-generating select,
+body.pdf-generating .actions,
+body.pdf-generating .clear-btn,
+body.pdf-generating .delete-btn,
+body.pdf-generating .submit-section,
+body.pdf-generating .col-delete,
+body.pdf-generating .status-options {
+    display: none !important;
+}
+
+body.pdf-generating .signature-pad {
+    border: 1px solid #777;
+}
+
+@media (max-width: 768px) {
+    body { padding: 0; }
+    .page { padding: 8px; }
+
+    .info-table td {
+        padding: 3px 2px;
         font-size: 10px;
     }
 
-    .datetime-content input {
-        width: 100%;
+    .info-table .info-label {
+        width: 25%;
+        font-size: 10px;
+        padding: 3px 2px;
+        white-space: normal;
     }
 
-
-    /* =========================
-       FOOTER NOTE
-       ========================= */
-
-    .footer-note {
-        margin-top: 25px;
-        font-size: 11px;
-        line-height: 1.5;
-
-        /* ITALIC FONT */
-        font-style: italic;
+    .info-table .info-input {
+        width: 25%;
+        padding: 3px 2px;
     }
 
-
-    /* =========================
-       SUBMIT
-       ========================= */
-
-    .submit-section {
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #ddd;
-        text-align: right;
+    .info-table input[type="text"],
+    .info-table input[type="date"],
+    .info-table input[type="datetime-local"] {
+        padding: 2px;
+        font-size: 10px;
     }
 
-    .submit-btn {
-        background: #16803c;
-        color: white;
-        min-width: 120px;
+    .inspection-table th, 
+    .inspection-table td {
+        padding: 2px;
+        font-size: 9px;
     }
 
+    .col-no { width: 4%; }
+    .col-date { width: 16%; }
+    .col-location { width: 14%; }
+    .col-status { width: 18%; }
+    .col-tag { width: 14%; }
+    .col-inspected { width: 14%; }
+    .col-signature { width: 15%; }
+    .col-delete { width: 5%; }
 
-    /* =========================
-       MOBILE
-       ========================= */
-
-    @media (max-width: 800px) {
-
-        body {
-            padding: 10px;
-        }
-
-        .page {
-            padding: 15px;
-        }
-
-        .inspection-table {
-            display: block;
-            overflow-x: auto;
-            min-width: 950px;
-        }
-
-        .supervisor-table {
-            display: block;
-            overflow-x: auto;
-            min-width: 850px;
-        }
+    .inspection-table input {
+        font-size: 9px;
+        padding: 2px;
     }
 
-
-    /* =========================
-       PRINT / PDF
-       ========================= */
-
-    @media print {
-
-        body {
-            background: white;
-            padding: 0;
-        }
-
-        .page {
-            max-width: none;
-            box-shadow: none;
-            padding: 15mm;
-        }
-
-        .actions,
-        .delete-cell,
-        .submit-section {
-            display: none !important;
-        }
-
-        input,
-        select,
-        textarea {
-            border: none;
-            box-shadow: none;
-        }
-
-        .signature-pad {
-            border: 1px solid #777;
-        }
-
-        .inspection-table {
-            page-break-inside: auto;
-        }
-
-        tr {
-            page-break-inside: avoid;
-        }
-
+    .status-options { gap: 2px; }
+    .status-options label {
+        font-size: 8px;
+        white-space: normal;
+        line-height: 1;
+    }
+    .status-options input {
+        margin-right: 2px;
+        transform: scale(0.8);
     }
 
+    .signature-pad { height: 35px; }
 
-    .save-status {
-        display: none;
-        margin-top: 12px;
-        padding: 10px 12px;
-        border-radius: 4px;
-        font-size: 13px;
-        text-align: left;
-    }
-    .save-status.success {
-        display: block;
-        background: #eaf7ee;
-        color: #176b35;
-        border: 1px solid #a9d9b8;
-    }
-    .save-status.error {
-        display: block;
-        background: #fff1f0;
-        color: #a61b1b;
-        border: 1px solid #f0b3b0;
+    .delete-btn {
+        padding: 2px 4px;
+        font-size: 9px;
     }
 
+    .supervisor-table td {
+        padding: 4px;
+        font-size: 10px;
+    }
+    .supervisor-inline {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+.save-status {
+    display: none;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: left;
+}
+.save-status.success {
+    display: block;
+    background: #eaf7ee;
+    color: #176b35;
+    border: 1px solid #a9d9b8;
+}
+.save-status.error {
+    display: block;
+    background: #fff1f0;
+    color: #a61b1b;
+    border: 1px solid #f0b3b0;
+}
 </style>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-
-
 <body>
 
-
-<div class="page">
-
-
-    <!-- =========================
-         TITLE
-         ========================= -->
-
-    <h1>
-        Scaffold Register Record
-    </h1>
-
-
+<div class="page" id="pdf-content">
+    <h1>Scaffold Register Record</h1>
     <p class="intro">
-
         This register shall be recorded by a competent person and shall be kept at the
         worksite for use by an inspector pursuant to MOM WSH (Scaffolds) Regulations
         2011 and its subsidiaries legislation.
-
     </p>
 
-
-    <!-- =========================
-         BASIC INFORMATION
-         ========================= -->
-
     <table class="info-table">
-
         <tr>
-
-            <td class="info-label">
-                Company:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="company"
-                    required>
-
-            </td>
-
-
-            <td class="info-label">
-                Trade of Work:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="tradeOfWork"
-                    required>
-
-            </td>
-
+            <td class="info-label">Company:</td>
+            <td class="info-input"><input type="text" id="company" required><span class="pdf-display-val"></span></td>
+            <td class="info-label">Trade of Work:</td>
+            <td class="info-input"><input type="text" id="tradeOfWork" required><span class="pdf-display-val"></span></td>
         </tr>
-
-
         <tr>
-
-            <td class="info-label">
-                Project:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="project"
-                    required>
-
-            </td>
-
-
-            <td class="info-label">
-                Date:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="date"
-                    id="recordDate"
-                    required>
-
-            </td>
-
+            <td class="info-label">Project:</td>
+            <td class="info-input"><input type="text" id="project" required><span class="pdf-display-val"></span></td>
+            <td class="info-label">Date:</td>
+            <td class="info-input"><input type="date" id="recordDate" required><span class="pdf-display-val"></span></td>
         </tr>
-
-
         <tr>
-
-            <td class="info-label">
-                Supervised by:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="supervisedBy"
-                    required>
-
-            </td>
-
-
-            <td class="info-label">
-                Type of Scaffold:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="scaffoldType"
-                    required>
-
-            </td>
-
+            <td class="info-label">Supervised by:</td>
+            <td class="info-input"><input type="text" id="supervisedBy" required><span class="pdf-display-val"></span></td>
+            <td class="info-label">Type of Scaffold:</td>
+            <td class="info-input"><input type="text" id="scaffoldType" required><span class="pdf-display-val"></span></td>
         </tr>
-
-
         <tr>
-
-            <td class="info-label">
-                Location:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="location"
-                    required>
-
-            </td>
-
-
-            <td class="info-label">
-                Max. Height:
-            </td>
-
-            <td class="info-input">
-
-                <input
-                    type="text"
-                    id="maxHeight"
-                    placeholder="e.g. 10 m"
-                    required>
-
-            </td>
-
+            <td class="info-label">Location:</td>
+            <td class="info-input"><input type="text" id="location" required><span class="pdf-display-val"></span></td>
+            <td class="info-label">Max. Height:</td>
+            <td class="info-input"><input type="text" id="maxHeight" placeholder="e.g. 10 m" required><span class="pdf-display-val"></span></td>
         </tr>
-
     </table>
 
-
-    <!-- =========================
-         INSPECTION
-         ========================= -->
-
-    <div class="section-title">
-
-        Report of result of inspections.
-
-    </div>
-
+    <div class="section-title">Report of result of inspections.</div>
 
     <table class="inspection-table">
-
         <thead>
-
             <tr>
-
-                <th class="col-no">
-                    No.
-                </th>
-
-                <th class="col-date">
-                    Date of<br>
-                    Inspection
-                </th>
-
-                <th class="col-location">
-                    Location
-                </th>
-
-                <th class="col-status">
-                    Location Status<br>
-                    (With Defects / In Good Order)
-                </th>
-
-                <th class="col-tag">
-                    Scaffold Tag No. /<br>
-                    Identification
-                </th>
-
-                <th class="col-inspected">
-                    Inspected By
-                </th>
-
-                <th class="col-signature">
-                    Signature
-                </th>
-
-                <th class="col-delete">
-                </th>
-
+                <th class="col-no">No.</th>
+                <th class="col-date">Date of<br>Inspection</th>
+                <th class="col-location">Location</th>
+                <th class="col-status">Location Status<br>(Defects / In Good Order)</th>
+                <th class="col-tag">Scaffold Tag No. /<br>ID</th>
+                <th class="col-inspected">Inspected By</th>
+                <th class="col-signature">Signature</th>
+                <th class="col-delete"></th>
             </tr>
-
         </thead>
-
-
-        <tbody id="inspectionBody">
-        </tbody>
-
+        <tbody id="inspectionBody"></tbody>
     </table>
 
-
-    <!-- =========================
-         ACTION BUTTONS
-         ========================= -->
-
     <div class="actions">
-
-        <button
-            type="button"
-            class="add-btn"
-            onclick="addInspectionRow()">
-
-            + Add Inspection Row
-
-        </button>
-
-
-        
-
+        <button type="button" class="add-btn" onclick="addInspectionRow()">+ Add Inspection Row</button>
     </div>
 
-
-    <!-- =========================
-         DEDICATED REMARKS
-         ========================= -->
-
-	<div class="remarks-section">
-
-        <div class="remarks-title">
-            Remarks
-        </div>
-
-
+    <div class="remarks-section">
+        <div class="remarks-title">Remarks</div>
         <div class="remarks-box">
-
             <textarea id="remarks" placeholder="Enter remarks"></textarea>
-
+            <span class="pdf-display-val"></span>
         </div>
-
     </div>
-
-
-    <!-- =========================
-         SUPERVISOR
-         ========================= -->
 
     <div class="supervisor-section">
-
         <table class="supervisor-table">
-
             <tr>
-
-                <!-- LEFT LABEL -->
-
-                <td class="supervisor-label">
-
-                    Name &amp; Signature of Scaffold Supervisor
-
-                </td>
-
-
-                <!-- NAME + SIGNATURE -->
-
+                <td class="supervisor-label">Name &amp; Signature of Scaffold Supervisor</td>
                 <td class="supervisor-content">
-
                     <div class="supervisor-inline">
-
-
                         <div class="supervisor-name">
-
-                            <label for="supervisorName">
-                                Name:
-                            </label>
-
-                            <input
-                                type="text"
-                                id="supervisorName"
-                                placeholder="Supervisor name"
-                                required>
-
+                            <label for="supervisorName">Name:</label>
+                            <input type="text" id="supervisorName" placeholder="Supervisor name" required>
+                            <span class="pdf-display-val"></span>
                         </div>
-
-
                         <div class="supervisor-signature-container">
-
-                            <label>
-                                Signature:
-                            </label>
-
-                            <canvas
-                                id="supervisorSignature"
-                                class="signature-pad supervisor-signature">
-                            </canvas>
-
-
-                            <button
-                                type="button"
-                                class="clear-btn"
-                                onclick="clearSupervisorSignature()">
-
-                                Clear Signature
-
-                            </button>
-
+                            <label>Signature:</label>
+                            <canvas id="supervisorSignature" class="signature-pad supervisor-signature"></canvas>
+                            <button type="button" class="clear-btn" onclick="clearSupervisorSignature()">Clear Signature</button>
                         </div>
-
                     </div>
-
                 </td>
-
-
-                <!-- DATE TIME -->
-
                 <td class="datetime-content">
-
-                    <label for="supervisorDateTime">
-
-                        Date &amp; Time:
-
-                    </label>
-
-
-                    <input
-                        type="datetime-local"
-                        id="supervisorDateTime"
-                        required>
-
+                    <label for="supervisorDateTime">Date &amp; Time:</label>
+                    <input type="datetime-local" id="supervisorDateTime" required>
+                    <span class="pdf-display-val"></span>
                 </td>
-
             </tr>
-
         </table>
-
     </div>
-
-
-    <!-- =========================
-         NOTE
-         ========================= -->
 
     <div class="footer-note">
-
-        <strong>Note:</strong>
-
-        This Scaffold Register shall be kept available at the
-        worksite for inspection by authorized inspector.
-
-
-        <br><br>
-
-
-        A separate Scaffold Register shall be used for each week
-        of Scaffold Inspection.
-
+        <strong>Note:</strong> This Scaffold Register shall be kept available at the worksite for inspection by authorized inspector.<br>
+        A separate Scaffold Register shall be used for each week of Scaffold Inspection.
     </div>
-
-
-    <!-- =========================
-         SUBMIT
-         ========================= -->
 
     <div class="submit-section">
-
-        <button
-            type="button"
-            class="submit-btn"
-            onclick="submitForm()">
-
-            Submit
-
-        </button>
-
+        <button type="button" class="submit-btn" onclick="submitForm()">Save as PDF</button>
         <div id="saveStatus" class="save-status"></div>
-
     </div>
-
-
 </div>
 
-
-
 <script>
+let inspectionCount = 0;
+let supervisorSignatureState = null;
 
+window.addEventListener("DOMContentLoaded", function () {
+    addInspectionRow();
+    setTodayDate();
+    setCurrentDateTime();
+    setupSignaturePad();
+});
 
-    // ========================================
-    // VARIABLES
-    // ========================================
+function setTodayDate() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    document.getElementById("recordDate").value = `${yyyy}-${mm}-${dd}`;
+}
 
-    let inspectionCount = 0;
+function setCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("supervisorDateTime").value = `${year}-${month}-${day}T${hours}:${minutes}`;
+}
 
-    let supervisorSignatureState = null;
+function addInspectionRow() {
+    inspectionCount++;
+    const tbody = document.getElementById("inspectionBody");
+    const row = document.createElement("tr");
 
+    row.innerHTML = `
+        <td class="row-number">${inspectionCount}</td>
+        <td>
+            <input type="date">
+            <span class="pdf-display-val"></span>
+        </td>
+        <td>
+            <input type="text" placeholder="Location">
+            <span class="pdf-display-val"></span>
+        </td>
+        <td>
+            <div class="status-options">
+                <label><input type="radio" name="status_${inspectionCount}" value="With Defects"> With Defects</label>
+                <label><input type="radio" name="status_${inspectionCount}" value="In Good Order"> In Good Order</label>
+            </div>
+            <span class="pdf-display-val"></span>
+        </td>
+        <td>
+            <input type="text" placeholder="Tag / ID">
+            <span class="pdf-display-val"></span>
+        </td>
+        <td>
+            <input type="text" placeholder="Name">
+            <span class="pdf-display-val"></span>
+        </td>
+        <td>
+            <canvas class="signature-pad inspection-signature"></canvas>
+            <button type="button" class="clear-btn" style="margin-top:2px; padding:2px 4px; font-size:8px;" onclick="clearCanvas(this)">Clear</button>
+        </td>
+        <td class="col-delete">
+            <button type="button" class="delete-btn" onclick="deleteInspectionRow(this)">X</button>
+        </td>
+    `;
 
-    // ========================================
-    // PAGE LOAD
-    // ========================================
+    tbody.appendChild(row);
+    setupRowSignature(row);
+    renumberRows();
+}
 
-    window.addEventListener(
-        "DOMContentLoaded",
-        function () {
+function deleteInspectionRow(button) {
+    button.closest("tr").remove();
+    renumberRows();
+}
 
-            addInspectionRow();
+function renumberRows() {
+    const rows = document.querySelectorAll("#inspectionBody tr");
+    rows.forEach(function (row, index) {
+        row.querySelector(".row-number").textContent = index + 1;
+    });
+}
 
-            setTodayDate();
-
-            setCurrentDateTime();
-
-            setupSignaturePad();
-
+function syncInputsForPdf() {
+    document.querySelectorAll("td, div, .remarks-box").forEach(container => {
+        const input = container.querySelector("input[type='text'], input[type='date'], input[type='datetime-local'], textarea");
+        const pdfSpan = container.querySelector(".pdf-display-val");
+        if (input && pdfSpan) {
+            pdfSpan.textContent = input.value || "";
         }
-    );
-
-
-    // ========================================
-    // TODAY'S DATE
-    // ========================================
-
-    function setTodayDate() {
-
-        const today = new Date();
-
-        const yyyy =
-            today.getFullYear();
-
-        const mm =
-            String(
-                today.getMonth() + 1
-            ).padStart(2, "0");
-
-        const dd =
-            String(
-                today.getDate()
-            ).padStart(2, "0");
-
-
-        document.getElementById(
-            "recordDate"
-        ).value =
-            `${yyyy}-${mm}-${dd}`;
-
-    }
-
-
-    // ========================================
-    // CURRENT DATE AND TIME
-    // ========================================
-
-    function setCurrentDateTime() {
-
-        const now = new Date();
-
-        const year =
-            now.getFullYear();
-
-        const month =
-            String(
-                now.getMonth() + 1
-            ).padStart(2, "0");
-
-        const day =
-            String(
-                now.getDate()
-            ).padStart(2, "0");
-
-        const hours =
-            String(
-                now.getHours()
-            ).padStart(2, "0");
-
-        const minutes =
-            String(
-                now.getMinutes()
-            ).padStart(2, "0");
-
-
-        document.getElementById(
-            "supervisorDateTime"
-        ).value =
-            `${year}-${month}-${day}T${hours}:${minutes}`;
-
-    }
-
-
-    // ========================================
-    // ADD INSPECTION ROW
-    // ========================================
-
-    function addInspectionRow() {
-
-        inspectionCount++;
-
-
-        const tbody =
-            document.getElementById(
-                "inspectionBody"
-            );
-
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td class="row-number">
-                ${inspectionCount}
-            </td>
-
-
-            <td>
-
-                <input
-                    type="date">
-
-            </td>
-
-
-            <td>
-
-                <input
-                    type="text"
-                    placeholder="Location">
-
-            </td>
-
-
-            <td>
-
-                <div class="status-options">
-
-                    <label>
-
-                        <input
-                            type="radio"
-                            name="status_${inspectionCount}"
-                            value="With Defects">
-
-                        With Defects
-
-                    </label>
-
-
-                    <label>
-
-                        <input
-                            type="radio"
-                            name="status_${inspectionCount}"
-                            value="In Good Order">
-
-                        In Good Order
-
-                    </label>
-
-                </div>
-
-            </td>
-
-
-            <td>
-
-                <input
-                    type="text"
-                    placeholder="Tag No. / ID">
-
-            </td>
-
-
-            <td>
-
-                <input
-                    type="text"
-                    placeholder="Name">
-
-            </td>
-
-
-            <td>
-
-                <canvas
-                    class="signature-pad inspection-signature">
-                </canvas>
-
-
-                <button
-                    type="button"
-                    class="clear-btn"
-                    style="
-                        margin-top:4px;
-                        padding:4px 7px;
-                        font-size:10px;
-                    "
-                    onclick="clearCanvas(this)">
-
-                    Clear
-
-                </button>
-
-            </td>
-
-
-            <td>
-
-                <button
-                    type="button"
-                    class="delete-btn"
-                    onclick="deleteInspectionRow(this)">
-
-                    X
-
-                </button>
-
-            </td>
-
-        `;
-
-
-        tbody.appendChild(row);
-
-
-        setupRowSignature(row);
-
-
-        renumberRows();
-
-    }
-
-
-    // ========================================
-    // DELETE ROW
-    // ========================================
-
-    function deleteInspectionRow(button) {
-
-        const row =
-            button.closest("tr");
-
-
-        row.remove();
-
-
-        renumberRows();
-
-    }
-
-
-    // ========================================
-    // RENUMBER ROWS
-    // ========================================
-
-    function renumberRows() {
-
-        const rows =
-            document.querySelectorAll(
-                "#inspectionBody tr"
-            );
-
-
-        rows.forEach(
-            function (row, index) {
-
-                row.querySelector(
-                    ".row-number"
-                ).textContent =
-                    index + 1;
-
-            }
-        );
-
-    }
-
-
-    // ========================================
-    // CLEAR FORM
-    // ========================================
-
-    function clearForm() {
-
-        if (
-            !confirm(
-                "Clear all form information?"
-            )
-        ) {
-
-            return;
-
+    });
+
+    document.querySelectorAll("#inspectionBody tr").forEach(row => {
+        const radios = row.querySelectorAll("input[type='radio']");
+        const pdfSpan = row.cells[3].querySelector(".pdf-display-val");
+        if (radios.length && pdfSpan) {
+            let selectedValue = "";
+            radios.forEach(radio => {
+                if (radio.checked) selectedValue = radio.value;
+            });
+            pdfSpan.textContent = selectedValue;
         }
+    });
+}
 
+function resetFormFields() {
+    document.querySelectorAll("input, textarea, select").forEach(function (element) {
+        if (element.type === "radio" || element.type === "checkbox") {
+            element.checked = false;
+        } else {
+            element.value = "";
+        }
+    });
+    document.getElementById("inspectionBody").innerHTML = "";
+    inspectionCount = 0;
+    addInspectionRow();
+    clearSupervisorSignature();
+    setTodayDate();
+    setCurrentDateTime();
+}
 
-        document.querySelectorAll(
-            "input, textarea, select"
-        ).forEach(
-            function (element) {
-
-                if (
-                    element.type === "radio" ||
-                    element.type === "checkbox"
-                ) {
-
-                    element.checked = false;
-
-                } else {
-
-                    element.value = "";
-
-                }
-
-            }
-        );
-
-
-        document.getElementById(
-            "inspectionBody"
-        ).innerHTML = "";
-
-
-        inspectionCount = 0;
-
-
-        addInspectionRow();
-
-
-        clearSupervisorSignature();
-
-    }
-
-
-    // ========================================
-    // SUBMIT
-    // ========================================
-
-function submitForm() {
-    // 1. Validate required fields
+async function submitForm() {
     const requiredFields = document.querySelectorAll("input[required]");
     let valid = true;
 
@@ -1249,370 +602,143 @@ function submitForm() {
     });
 
     if (!valid) {
-        showSaveStatus(
-            "Please complete all required fields before submitting.",
-            "error"
-        );
+        showSaveStatus("Please complete all required fields before saving.", "error");
         return;
     }
 
-    // 2. Hide status message before printing
-    const status = document.getElementById("saveStatus");
-    status.style.display = "none";
+    const submitButton = document.querySelector(".submit-btn");
 
-    // 3. Format dynamic filename: "Project_YYYY-MM-DD_HH-MM-SS"
-    const originalTitle = document.title;
-    const projectVal = document.getElementById("project").value.trim() || "Scaffold_Record";
-    
-    // Clean up project name to remove special characters safe for filenames
-    const safeProjectName = projectVal.replace(/[^a-zA-Z0-9_-]/g, "_");
+    try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Generating PDF...";
+        showSaveStatus("Generating PDF and saving locally. Please wait...", "success");
 
-    // Generate formatted date & time timestamp
-    const now = new Date();
-    const dateStr = now.toISOString().split("T")[0]; // YYYY-MM-DD
-    const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-"); // HH-MM-SS
+        syncInputsForPdf();
+        document.body.classList.add("pdf-generating");
 
-    // Set document title (browser uses this as default PDF filename)
-    document.title = `${safeProjectName}_${dateStr}_${timeStr}`;
+        const projectVal = document.getElementById("project").value.trim() || "Scaffold_Record";
+        const safeProjectName = projectVal.replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 80);
+        const now = new Date();
+        const pad = n => String(n).padStart(2, "0");
+        const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const timeStr = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+        const filename = `Scaffold_Register_${safeProjectName}_${dateStr}_${timeStr}.pdf`;
 
-    // 4. Trigger print/PDF window
-    window.print();
+        const pdfElement = document.getElementById("pdf-content");
+        
+        await html2pdf()
+            .set({
+                margin: [5, 5, 5, 5],
+                filename: filename,
+                image: { type: "jpeg", quality: 0.95 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
+                jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            })
+            .from(pdfElement)
+            .save();
 
-    // 5. Restore original page title
-    document.title = originalTitle;
+        showSaveStatus("✓ PDF downloaded to local drive successfully.", "success");
+        setTimeout(resetFormFields, 1500);
 
-    // 6. Clear form fields
-    resetFormFields();
+    } catch (error) {
+        showSaveStatus("Error: " + error.message, "error");
+    } finally {
+        document.body.classList.remove("pdf-generating");
+        submitButton.disabled = false;
+        submitButton.textContent = "Save PDF to Local Drive";
+    }
 }
-    // ========================================
-    // PREPARE CANVAS
-    // ========================================
 
-    function prepareCanvas(canvas) {
+function showSaveStatus(message, type) {
+    const status = document.getElementById("saveStatus");
+    status.textContent = message;
+    status.className = "save-status " + type;
+    status.style.display = "block";
+}
 
-        const ratio =
-            window.devicePixelRatio || 1;
+function prepareCanvas(canvas) {
+    const ctx = canvas.getContext("2d");
 
-
-        const rect =
-            canvas.getBoundingClientRect();
-
-
-        canvas.width =
-            rect.width * ratio;
-
-
-        canvas.height =
-            rect.height * ratio;
-
-
-        const ctx =
-            canvas.getContext("2d");
-
-
-        ctx.scale(
-            ratio,
-            ratio
-        );
-
-
-        ctx.lineWidth = 2;
-
-        ctx.lineCap =
-            "round";
-
-        ctx.lineJoin =
-            "round";
-
-        ctx.strokeStyle =
-            "#111";
-
-
-        return {
-
-            canvas: canvas,
-
-            ctx: ctx,
-
-            drawing: false
-
-        };
-
-    }
-
-
-    // ========================================
-    // DRAW SIGNATURE
-    // ========================================
-
-    function attachDrawing(
-        canvas,
-        state
-    ) {
-
-        function getPosition(event) {
-
-            const rect =
-                canvas.getBoundingClientRect();
-
-
-            if (
-                event.touches &&
-                event.touches.length > 0
-            ) {
-
-                return {
-
-                    x:
-                        event.touches[0].clientX -
-                        rect.left,
-
-                    y:
-                        event.touches[0].clientY -
-                        rect.top
-
-                };
-
-            }
-
-
-            return {
-
-                x:
-                    event.clientX -
-                    rect.left,
-
-                y:
-                    event.clientY -
-                    rect.top
-
-            };
-
+    function resize() {
+        if (canvas.width === 0 || canvas.offsetWidth !== canvas.width) {
+            const rect = canvas.getBoundingClientRect();
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = rect.width * ratio || 300;
+            canvas.height = rect.height * ratio || 50;
+            ctx.scale(ratio, ratio);
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.strokeStyle = "#111";
         }
-
-
-        function start(event) {
-
-            event.preventDefault();
-
-
-            state.drawing = true;
-
-
-            const pos =
-                getPosition(event);
-
-
-            state.ctx.beginPath();
-
-
-            state.ctx.moveTo(
-                pos.x,
-                pos.y
-            );
-
-        }
-
-
-        function draw(event) {
-
-            if (
-                !state.drawing
-            ) {
-
-                return;
-
-            }
-
-
-            event.preventDefault();
-
-
-            const pos =
-                getPosition(event);
-
-
-            state.ctx.lineTo(
-                pos.x,
-                pos.y
-            );
-
-
-            state.ctx.stroke();
-
-        }
-
-
-        function stop(event) {
-
-            if (event) {
-
-                event.preventDefault();
-
-            }
-
-
-            state.drawing = false;
-
-        }
-
-
-        canvas.addEventListener(
-            "mousedown",
-            start
-        );
-
-
-        canvas.addEventListener(
-            "mousemove",
-            draw
-        );
-
-
-        canvas.addEventListener(
-            "mouseup",
-            stop
-        );
-
-
-        canvas.addEventListener(
-            "mouseleave",
-            stop
-        );
-
-
-        canvas.addEventListener(
-            "touchstart",
-            start,
-            {
-                passive: false
-            }
-        );
-
-
-        canvas.addEventListener(
-            "touchmove",
-            draw,
-            {
-                passive: false
-            }
-        );
-
-
-        canvas.addEventListener(
-            "touchend",
-            stop,
-            {
-                passive: false
-            }
-        );
-
     }
 
+    resize();
+    return { canvas, ctx, drawing: false, resize };
+}
 
-    // ========================================
-    // INSPECTION SIGNATURE
-    // ========================================
-
-    function setupRowSignature(row) {
-
-        const canvas =
-            row.querySelector(
-                ".inspection-signature"
-            );
-
-
-        const state =
-            prepareCanvas(canvas);
-
-
-        attachDrawing(
-            canvas,
-            state
-        );
-
-
-        canvas._signatureState =
-            state;
-
+function attachDrawing(canvas, state) {
+    function getPosition(event) {
+        const rect = canvas.getBoundingClientRect();
+        const p = event.touches ? event.touches[0] : event;
+        return { x: p.clientX - rect.left, y: p.clientY - rect.top };
     }
 
-
-    // ========================================
-    // CLEAR INSPECTION SIGNATURE
-    // ========================================
-
-    function clearCanvas(button) {
-
-        const canvas =
-            button.parentElement
-                .querySelector("canvas");
-
-
-        const ctx =
-            canvas.getContext("2d");
-
-
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
+    function start(event) {
+        event.preventDefault();
+        state.resize();
+        state.drawing = true;
+        const pos = getPosition(event);
+        state.ctx.beginPath();
+        state.ctx.moveTo(pos.x, pos.y);
     }
 
-
-    // ========================================
-    // SUPERVISOR SIGNATURE
-    // ========================================
-
-    function setupSignaturePad() {
-
-        const canvas =
-            document.getElementById(
-                "supervisorSignature"
-            );
-
-
-        supervisorSignatureState =
-            prepareCanvas(canvas);
-
-
-        attachDrawing(
-            canvas,
-            supervisorSignatureState
-        );
-
+    function draw(event) {
+        if (!state.drawing) return;
+        event.preventDefault();
+        const pos = getPosition(event);
+        state.ctx.lineTo(pos.x, pos.y);
+        state.ctx.stroke();
     }
 
-
-    // ========================================
-    // CLEAR SUPERVISOR SIGNATURE
-    // ========================================
-
-    function clearSupervisorSignature() {
-
-        const canvas =
-            document.getElementById(
-                "supervisorSignature"
-            );
-
-
-        const ctx =
-            canvas.getContext("2d");
-
-
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
+    function stop(event) {
+        if (event) event.preventDefault();
+        state.drawing = false;
     }
 
+    canvas.addEventListener("mousedown", start);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stop);
+    canvas.addEventListener("mouseleave", stop);
+    canvas.addEventListener("touchstart", start, { passive: false });
+    canvas.addEventListener("touchmove", draw, { passive: false });
+    canvas.addEventListener("touchend", stop, { passive: false });
+}
+
+function setupRowSignature(row) {
+    const canvas = row.querySelector(".inspection-signature");
+    const state = prepareCanvas(canvas);
+    attachDrawing(canvas, state);
+}
+
+function clearCanvas(button) {
+    const canvas = button.parentElement.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function setupSignaturePad() {
+    const canvas = document.getElementById("supervisorSignature");
+    supervisorSignatureState = prepareCanvas(canvas);
+    attachDrawing(canvas, supervisorSignatureState);
+}
+
+function clearSupervisorSignature() {
+    const canvas = document.getElementById("supervisorSignature");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 </script>
-
 </body>
 </html>
