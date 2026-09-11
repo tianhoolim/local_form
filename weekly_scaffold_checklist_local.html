@@ -510,7 +510,7 @@ textarea { resize: vertical; }
     </div>
 
     <div class="buttons">
-        <button class="submit-btn" type="button" onclick="submitForm()">Generate PDF</button>
+        <button class="submit-btn" type="button" onclick="submitForm()">Generate PDF1</button>
     </div>
     <div id="status" class="status"></div>
 </div>
@@ -618,7 +618,7 @@ async function submitForm() {
     } finally {
         hideElements.forEach(el => el.style.display = "");
         button.disabled = false;
-        button.textContent = "Generate PDF1";
+        button.textContent = "Generate PDF";
     }
 }
 
