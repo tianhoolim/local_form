@@ -558,7 +558,7 @@ body.pdf-generating .signature-pad {
     </div>
 
     <div class="buttons">
-        <button class="submit-btn" type="button" onclick="submitForm()">Generate PDF &amp; Upload to Server</button>
+        <button class="submit-btn" type="button" onclick="submitForm()">Save as PDF</button>
     </div>
     <div id="status" class="status"></div>
 </div>
@@ -656,9 +656,7 @@ async function submitForm() {
 
     const button = document.querySelector(".submit-btn");
     button.disabled = true;
-    button.textContent = "Generating PDF & Uploading...";
-
-    const PCLOUD_UPLOAD_CODE = "fMxXZ64gI7pdIgwRO7tB5HNpmJVkh4sQV";
+    button.textContent = "Generating PDF...";
 
     const company = document.getElementById("company").value.trim();
     const project = document.getElementById("project").value.trim();
@@ -680,7 +678,7 @@ async function submitForm() {
 
         await new Promise(resolve => setTimeout(resolve, 250));
 
-        const pdfBlob = await html2pdf()
+        await html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
                 filename: filename,
@@ -697,31 +695,17 @@ async function submitForm() {
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
             .from(page)
-            .outputPdf("blob");
+            .save();
 
-        const formData = new FormData();
-        formData.append("code", PCLOUD_UPLOAD_CODE);
-        formData.append("filename", filename);
-        formData.append("names", filename);
-        formData.append("nopartial", "1");
-        formData.append("file", pdfBlob, filename);
-
-        const response = await fetch("https://api.pcloud.com/uploadtolink", { method: "POST", body: formData });
-        const result = await response.json();
-
-        if (result.result === 0) {
-            status.textContent = "✓ PDF uploaded successfully to Server.";
-            status.style.color = "#176b35";
-        } else {
-            throw new Error(`Upload failed code: ${result.result}`);
-        }
+        status.textContent = "✓ PDF generated and downloaded successfully.";
+        status.style.color = "#176b35";
     } catch (error) {
         status.textContent = "Error: " + error.message;
         status.style.color = "#b42318";
     } finally {
         document.body.classList.remove("pdf-generating");
         button.disabled = false;
-        button.textContent = "Generate PDF & Upload to Server";
+        button.textContent = "Generate & Download PDF";
     }
 }
 
