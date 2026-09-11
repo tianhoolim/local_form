@@ -221,16 +221,25 @@ button:hover { opacity: 0.9; }
     line-height: 1.4;
     font-style: italic;
 }
-.submit-section {
+.buttons {
+    display: flex;
+    justify-content: flex-end;
     margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-    text-align: right;
 }
 .submit-btn {
-    background: #16803c;
+    background: #1677c8;
     color: white;
-    min-width: 120px;
+    border: 0;
+    border-radius: 4px;
+    padding: 10px 24px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.submit-btn:hover { background: #0d5fa5; }
+.status {
+    margin-top: 8px;
+    text-align: right;
+    font-size: 12px;
 }
 
 @media (max-width: 768px) {
@@ -316,31 +325,10 @@ button:hover { opacity: 0.9; }
 @media print {
     body { background: white; padding: 0; margin: 0; }
     .page { max-width: none; box-shadow: none; padding: 0; margin: 0; }
-    .actions, .delete-btn, .submit-section, .clear-btn { display: none !important; }
+    .actions, .buttons, .status, .delete-btn, .clear-btn { display: none !important; }
     input, select, textarea { border: none; box-shadow: none; }
     .signature-pad { border: 1px solid #777; }
     tr { page-break-inside: avoid; }
-}
-
-.save-status {
-    display: none;
-    margin-top: 8px;
-    padding: 8px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    text-align: left;
-}
-.save-status.success {
-    display: block;
-    background: #eaf7ee;
-    color: #176b35;
-    border: 1px solid #a9d9b8;
-}
-.save-status.error {
-    display: block;
-    background: #fff1f0;
-    color: #a61b1b;
-    border: 1px solid #f0b3b0;
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -441,10 +429,10 @@ button:hover { opacity: 0.9; }
         A separate Scaffold Register shall be used for each week of Scaffold Inspection.
     </div>
 
-    <div class="submit-section">
-        <button type="button" class="submit-btn" onclick="submitForm()">Save PDF to Local Drive</button>
-        <div id="saveStatus" class="save-status"></div>
+    <div class="buttons">
+        <button class="submit-btn" type="button" onclick="submitForm()">Share / Save PDF</button>
     </div>
+    <div id="status" class="status"></div>
 </div>
 
 <script>
@@ -519,91 +507,76 @@ function renumberRows() {
     });
 }
 
-function resetFormFields() {
-    document.querySelectorAll("input, textarea, select").forEach(function (element) {
-        if (element.type === "radio" || element.type === "checkbox") {
-            element.checked = false;
-        } else {
-            element.value = "";
-        }
-    });
-    document.getElementById("inspectionBody").innerHTML = "";
-    inspectionCount = 0;
-    addInspectionRow();
-    clearSupervisorSignature();
-    setTodayDate();
-    setCurrentDateTime();
-}
-
 async function submitForm() {
-    const requiredFields = document.querySelectorAll("input[required]");
-    let valid = true;
+    const required = document.querySelectorAll("[required]");
+    let ok = true;
 
-    requiredFields.forEach(function (field) {
-        if (!field.value.trim()) {
-            field.style.borderColor = "#b42318";
-            valid = false;
-        } else {
-            field.style.borderColor = "#bbb";
-        }
+    required.forEach(el => {
+        const value = el.value.trim();
+        el.style.borderColor = value ? "#bbb" : "#b42318";
+        if (!value) ok = false;
     });
 
-    if (!valid) {
-        showSaveStatus("Please complete all required fields before saving.", "error");
+    const status = document.getElementById("status");
+
+    if (!ok) {
+        status.textContent = "Please complete all required fields.";
+        status.style.color = "#b42318";
         return;
     }
 
-    const submitButton = document.querySelector(".submit-btn");
+    const button = document.querySelector(".submit-btn");
+    button.disabled = true;
+    button.textContent = "Generating PDF...";
+
+    const company = document.getElementById("company").value.trim();
+    const project = document.getElementById("project").value.trim();
+    const recordDate = document.getElementById("recordDate").value;
+
+    const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
+    const filename = `Scaffold_Register_${safe(company) || "Company"}_${safe(project) || "Project"}_${recordDate || "Date"}.pdf`;
+
+    const page = document.getElementById("pdf-content");
+    const hideElements = document.querySelectorAll(".actions, .buttons, .status, .delete-btn, .clear-btn");
+    hideElements.forEach(el => el.style.display = "none");
 
     try {
-        submitButton.disabled = true;
-        submitButton.textContent = "Generating PDF...";
-        showSaveStatus("Generating PDF and saving locally. Please wait...", "success");
-
-        const projectVal = document.getElementById("project").value.trim() || "Scaffold_Record";
-        const safeProjectName = projectVal.replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 80);
-        const now = new Date();
-        const pad = n => String(n).padStart(2, "0");
-        const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-        const timeStr = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-        const filename = `Scaffold_Register_${safeProjectName}_${dateStr}_${timeStr}.pdf`;
-
-        const pdfHiddenElements = document.querySelectorAll(".actions, .submit-section, .delete-btn, .clear-btn");
-        pdfHiddenElements.forEach(el => el.style.display = "none");
-
-        const pdfElement = document.getElementById("pdf-content");
-        
-        await html2pdf()
+        const worker = html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
-                filename: filename,
-                image: { type: "jpeg", quality: 0.95 },
+                image: { type: "jpeg", quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
-            .from(pdfElement)
-            .save();
+            .from(page);
 
-        pdfHiddenElements.forEach(el => el.style.display = "");
-        showSaveStatus("✓ PDF downloaded to local drive successfully.", "success");
-        setTimeout(resetFormFields, 1500);
+        const pdfBlob = await worker.output('blob');
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
 
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+                title: 'Scaffold Register Record',
+                text: 'Attached is the completed Scaffold Register Record PDF.',
+                files: [pdfFile]
+            });
+            status.textContent = "✓ PDF shared successfully.";
+            status.style.color = "#176b35";
+        } else {
+            html2pdf().set({ filename: filename }).from(page).save();
+            status.textContent = "✓ Web Share not supported. PDF downloaded to local drive.";
+            status.style.color = "#176b35";
+        }
     } catch (error) {
-        showSaveStatus("Error: " + error.message, "error");
+        if (error.name !== 'AbortError') {
+            status.textContent = "Error: " + error.message;
+            status.style.color = "#b42318";
+        }
     } finally {
-        const pdfHiddenElements = document.querySelectorAll(".actions, .submit-section, .delete-btn, .clear-btn");
-        pdfHiddenElements.forEach(el => el.style.display = "");
-        submitButton.disabled = false;
-        submitButton.textContent = "Save PDF to Local Drive";
+        hideElements.forEach(el => el.style.display = "");
+        button.disabled = false;
+        button.textContent = "Share / Save PDF";
     }
-}
-
-function showSaveStatus(message, type) {
-    const status = document.getElementById("saveStatus");
-    status.textContent = message;
-    status.className = "save-status " + type;
-    status.style.display = "block";
 }
 
 function prepareCanvas(canvas) {
