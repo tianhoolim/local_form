@@ -49,6 +49,12 @@ textarea { resize: vertical; }
     width: 100%; height: 65px; border: 1px solid #bbb; background: #fff;
     touch-action: none; cursor: crosshair; display: block;
 }
+.signature-img {
+    display: none;
+    max-width: 100%;
+    height: 50px;
+    object-fit: contain;
+}
 .clear-btn {
     margin-top: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer;
 }
@@ -61,6 +67,44 @@ textarea { resize: vertical; }
 }
 .submit-btn:hover { background: #0d5fa5; }
 .status { margin-top: 8px; text-align: right; font-size: 12px; }
+
+.pdf-display-val {
+    display: none;
+    font-size: 11px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+body.pdf-generating {
+    width: 1024px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.pdf-generating .page {
+    max-width: 1024px !important;
+    width: 1024px !important;
+    margin: 0 !important;
+    padding: 15px !important;
+}
+
+body.pdf-generating .pdf-display-val {
+    display: block !important;
+}
+
+body.pdf-generating .signature-img {
+    display: block !important;
+}
+
+body.pdf-generating input,
+body.pdf-generating textarea,
+body.pdf-generating select,
+body.pdf-generating .buttons,
+body.pdf-generating .clear-btn,
+body.pdf-generating .signature-pad {
+    display: none !important;
+}
 
 @media (max-width: 768px) {
     body { padding: 0; }
@@ -104,25 +148,25 @@ textarea { resize: vertical; }
     <table class="info-table">
         <tr>
             <td class="label">Company:</td>
-            <td class="value"><input id="company" type="text" required></td>
+            <td class="value"><input id="company" type="text" required><span class="pdf-display-val"></span></td>
             <td class="label">Trade of Work:</td>
-            <td class="value"><input id="tradeOfWork" type="text" required></td>
+            <td class="value"><input id="tradeOfWork" type="text" required><span class="pdf-display-val"></span></td>
         </tr>
         <tr>
             <td class="label">Project:</td>
-            <td class="value"><input id="project" type="text" required></td>
+            <td class="value"><input id="project" type="text" required><span class="pdf-display-val"></span></td>
             <td class="label">Date &amp; Time:</td>
-            <td class="value"><input id="dateTime" type="datetime-local" required></td>
+            <td class="value"><input id="dateTime" type="datetime-local" required><span class="pdf-display-val"></span></td>
         </tr>
         <tr>
             <td class="label">Location:</td>
-            <td class="value"><input id="location" type="text" required></td>
+            <td class="value"><input id="location" type="text" required><span class="pdf-display-val"></span></td>
             <td class="label">Height of Scaffold:</td>
-            <td class="value"><input id="height" type="text" required></td>
+            <td class="value"><input id="height" type="text" required><span class="pdf-display-val"></span></td>
         </tr>
         <tr>
             <td class="label">Inspected by:</td>
-            <td class="value" colspan="3"><input id="inspectedBy" type="text" required></td>
+            <td class="value" colspan="3"><input id="inspectedBy" type="text" required><span class="pdf-display-val"></span></td>
         </tr>
     </table>
 
@@ -147,7 +191,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q1" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q1" value="No"></td>
                     <td class="choice"><input type="radio" name="q1" value="N/A"></td>
-                    <td><textarea name="remarks1" rows="1"></textarea></td>
+                    <td><textarea name="remarks1" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">2</td>
@@ -155,7 +199,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q2" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q2" value="No"></td>
                     <td class="choice"><input type="radio" name="q2" value="N/A"></td>
-                    <td><textarea name="remarks2" rows="1"></textarea></td>
+                    <td><textarea name="remarks2" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">3</td>
@@ -163,7 +207,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q3" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q3" value="No"></td>
                     <td class="choice"><input type="radio" name="q3" value="N/A"></td>
-                    <td><textarea name="remarks3" rows="1"></textarea></td>
+                    <td><textarea name="remarks3" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">4</td>
@@ -171,7 +215,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q4" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q4" value="No"></td>
                     <td class="choice"><input type="radio" name="q4" value="N/A"></td>
-                    <td><textarea name="remarks4" rows="1"></textarea></td>
+                    <td><textarea name="remarks4" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">5</td>
@@ -179,7 +223,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q5" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q5" value="No"></td>
                     <td class="choice"><input type="radio" name="q5" value="N/A"></td>
-                    <td><textarea name="remarks5" rows="1"></textarea></td>
+                    <td><textarea name="remarks5" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">6</td>
@@ -187,7 +231,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q6" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q6" value="No"></td>
                     <td class="choice"><input type="radio" name="q6" value="N/A"></td>
-                    <td><textarea name="remarks6" rows="1"></textarea></td>
+                    <td><textarea name="remarks6" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">7</td>
@@ -195,7 +239,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q7" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q7" value="No"></td>
                     <td class="choice"><input type="radio" name="q7" value="N/A"></td>
-                    <td><textarea name="remarks7" rows="1"></textarea></td>
+                    <td><textarea name="remarks7" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">8</td>
@@ -203,7 +247,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q8" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q8" value="No"></td>
                     <td class="choice"><input type="radio" name="q8" value="N/A"></td>
-                    <td><textarea name="remarks8" rows="1"></textarea></td>
+                    <td><textarea name="remarks8" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">9</td>
@@ -211,7 +255,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q9" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q9" value="No"></td>
                     <td class="choice"><input type="radio" name="q9" value="N/A"></td>
-                    <td><textarea name="remarks9" rows="1"></textarea></td>
+                    <td><textarea name="remarks9" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">10</td>
@@ -219,7 +263,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q10" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q10" value="No"></td>
                     <td class="choice"><input type="radio" name="q10" value="N/A"></td>
-                    <td><textarea name="remarks10" rows="1"></textarea></td>
+                    <td><textarea name="remarks10" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">11</td>
@@ -227,7 +271,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q11" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q11" value="No"></td>
                     <td class="choice"><input type="radio" name="q11" value="N/A"></td>
-                    <td><textarea name="remarks11" rows="1"></textarea></td>
+                    <td><textarea name="remarks11" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">12</td>
@@ -235,7 +279,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q12" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q12" value="No"></td>
                     <td class="choice"><input type="radio" name="q12" value="N/A"></td>
-                    <td><textarea name="remarks12" rows="1"></textarea></td>
+                    <td><textarea name="remarks12" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">13</td>
@@ -243,7 +287,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q13" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q13" value="No"></td>
                     <td class="choice"><input type="radio" name="q13" value="N/A"></td>
-                    <td><textarea name="remarks13" rows="1"></textarea></td>
+                    <td><textarea name="remarks13" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">14</td>
@@ -251,7 +295,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q14" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q14" value="No"></td>
                     <td class="choice"><input type="radio" name="q14" value="N/A"></td>
-                    <td><textarea name="remarks14" rows="1"></textarea></td>
+                    <td><textarea name="remarks14" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">15</td>
@@ -259,7 +303,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q15" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q15" value="No"></td>
                     <td class="choice"><input type="radio" name="q15" value="N/A"></td>
-                    <td><textarea name="remarks15" rows="1"></textarea></td>
+                    <td><textarea name="remarks15" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">16</td>
@@ -267,7 +311,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q16" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q16" value="No"></td>
                     <td class="choice"><input type="radio" name="q16" value="N/A"></td>
-                    <td><textarea name="remarks16" rows="1"></textarea></td>
+                    <td><textarea name="remarks16" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">17</td>
@@ -275,7 +319,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q17" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q17" value="No"></td>
                     <td class="choice"><input type="radio" name="q17" value="N/A"></td>
-                    <td><textarea name="remarks17" rows="1"></textarea></td>
+                    <td><textarea name="remarks17" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">18</td>
@@ -283,7 +327,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q18" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q18" value="No"></td>
                     <td class="choice"><input type="radio" name="q18" value="N/A"></td>
-                    <td><textarea name="remarks18" rows="1"></textarea></td>
+                    <td><textarea name="remarks18" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">19</td>
@@ -291,7 +335,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q19" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q19" value="No"></td>
                     <td class="choice"><input type="radio" name="q19" value="N/A"></td>
-                    <td><textarea name="remarks19" rows="1"></textarea></td>
+                    <td><textarea name="remarks19" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">20</td>
@@ -299,7 +343,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q20" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q20" value="No"></td>
                     <td class="choice"><input type="radio" name="q20" value="N/A"></td>
-                    <td><textarea name="remarks20" rows="1"></textarea></td>
+                    <td><textarea name="remarks20" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">21</td>
@@ -307,7 +351,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q21" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q21" value="No"></td>
                     <td class="choice"><input type="radio" name="q21" value="N/A"></td>
-                    <td><textarea name="remarks21" rows="1"></textarea></td>
+                    <td><textarea name="remarks21" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">22</td>
@@ -315,7 +359,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q22" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q22" value="No"></td>
                     <td class="choice"><input type="radio" name="q22" value="N/A"></td>
-                    <td><textarea name="remarks22" rows="1"></textarea></td>
+                    <td><textarea name="remarks22" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">23</td>
@@ -323,7 +367,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q23" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q23" value="No"></td>
                     <td class="choice"><input type="radio" name="q23" value="N/A"></td>
-                    <td><textarea name="remarks23" rows="1"></textarea></td>
+                    <td><textarea name="remarks23" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">24</td>
@@ -331,7 +375,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q24" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q24" value="No"></td>
                     <td class="choice"><input type="radio" name="q24" value="N/A"></td>
-                    <td><textarea name="remarks24" rows="1"></textarea></td>
+                    <td><textarea name="remarks24" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">25</td>
@@ -339,7 +383,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q25" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q25" value="No"></td>
                     <td class="choice"><input type="radio" name="q25" value="N/A"></td>
-                    <td><textarea name="remarks25" rows="1"></textarea></td>
+                    <td><textarea name="remarks25" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">26</td>
@@ -347,7 +391,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q26" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q26" value="No"></td>
                     <td class="choice"><input type="radio" name="q26" value="N/A"></td>
-                    <td><textarea name="remarks26" rows="1"></textarea></td>
+                    <td><textarea name="remarks26" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">27</td>
@@ -355,7 +399,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q27" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q27" value="No"></td>
                     <td class="choice"><input type="radio" name="q27" value="N/A"></td>
-                    <td><textarea name="remarks27" rows="1"></textarea></td>
+                    <td><textarea name="remarks27" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">28</td>
@@ -363,7 +407,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q28" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q28" value="No"></td>
                     <td class="choice"><input type="radio" name="q28" value="N/A"></td>
-                    <td><textarea name="remarks28" rows="1"></textarea></td>
+                    <td><textarea name="remarks28" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">29</td>
@@ -371,7 +415,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q29" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q29" value="No"></td>
                     <td class="choice"><input type="radio" name="q29" value="N/A"></td>
-                    <td><textarea name="remarks29" rows="1"></textarea></td>
+                    <td><textarea name="remarks29" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">30</td>
@@ -379,7 +423,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q30" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q30" value="No"></td>
                     <td class="choice"><input type="radio" name="q30" value="N/A"></td>
-                    <td><textarea name="remarks30" rows="1"></textarea></td>
+                    <td><textarea name="remarks30" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">31</td>
@@ -387,7 +431,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q31" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q31" value="No"></td>
                     <td class="choice"><input type="radio" name="q31" value="N/A"></td>
-                    <td><textarea name="remarks31" rows="1"></textarea></td>
+                    <td><textarea name="remarks31" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">32</td>
@@ -395,7 +439,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q32" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q32" value="No"></td>
                     <td class="choice"><input type="radio" name="q32" value="N/A"></td>
-                    <td><textarea name="remarks32" rows="1"></textarea></td>
+                    <td><textarea name="remarks32" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">33</td>
@@ -403,7 +447,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q33" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q33" value="No"></td>
                     <td class="choice"><input type="radio" name="q33" value="N/A"></td>
-                    <td><textarea name="remarks33" rows="1"></textarea></td>
+                    <td><textarea name="remarks33" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">34</td>
@@ -411,7 +455,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q34" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q34" value="No"></td>
                     <td class="choice"><input type="radio" name="q34" value="N/A"></td>
-                    <td><textarea name="remarks34" rows="1"></textarea></td>
+                    <td><textarea name="remarks34" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">35</td>
@@ -419,7 +463,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q35" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q35" value="No"></td>
                     <td class="choice"><input type="radio" name="q35" value="N/A"></td>
-                    <td><textarea name="remarks35" rows="1"></textarea></td>
+                    <td><textarea name="remarks35" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">36</td>
@@ -427,7 +471,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q36" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q36" value="No"></td>
                     <td class="choice"><input type="radio" name="q36" value="N/A"></td>
-                    <td><textarea name="remarks36" rows="1"></textarea></td>
+                    <td><textarea name="remarks36" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">37</td>
@@ -435,7 +479,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q37" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q37" value="No"></td>
                     <td class="choice"><input type="radio" name="q37" value="N/A"></td>
-                    <td><textarea name="remarks37" rows="1"></textarea></td>
+                    <td><textarea name="remarks37" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">38</td>
@@ -443,7 +487,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q38" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q38" value="No"></td>
                     <td class="choice"><input type="radio" name="q38" value="N/A"></td>
-                    <td><textarea name="remarks38" rows="1"></textarea></td>
+                    <td><textarea name="remarks38" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">39</td>
@@ -451,7 +495,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q39" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q39" value="No"></td>
                     <td class="choice"><input type="radio" name="q39" value="N/A"></td>
-                    <td><textarea name="remarks39" rows="1"></textarea></td>
+                    <td><textarea name="remarks39" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">40</td>
@@ -459,7 +503,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q40" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q40" value="No"></td>
                     <td class="choice"><input type="radio" name="q40" value="N/A"></td>
-                    <td><textarea name="remarks40" rows="1"></textarea></td>
+                    <td><textarea name="remarks40" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">41</td>
@@ -467,7 +511,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q41" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q41" value="No"></td>
                     <td class="choice"><input type="radio" name="q41" value="N/A"></td>
-                    <td><textarea name="remarks41" rows="1"></textarea></td>
+                    <td><textarea name="remarks41" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
                 <tr>
                     <td class="no">42</td>
@@ -475,7 +519,7 @@ textarea { resize: vertical; }
                     <td class="choice"><input type="radio" name="q42" value="Yes"></td>
                     <td class="choice"><input type="radio" name="q42" value="No"></td>
                     <td class="choice"><input type="radio" name="q42" value="N/A"></td>
-                    <td><textarea name="remarks42" rows="1"></textarea></td>
+                    <td><textarea name="remarks42" rows="1"></textarea><span class="pdf-display-val"></span></td>
                 </tr>
             </tbody>
         </table>
@@ -483,6 +527,7 @@ textarea { resize: vertical; }
 
     <div class="section-title">Remarks</div>
     <textarea id="generalRemarks" rows="3"></textarea>
+    <span class="pdf-display-val"></span>
 
     <div class="ack-section">
         <table class="ack-table">
@@ -493,26 +538,27 @@ textarea { resize: vertical; }
                 <td class="ack-label">Signature:</td>
                 <td>
                     <canvas id="signaturePad" class="signature-pad"></canvas>
+                    <img id="signatureImg" class="signature-img" alt="Signature">
                     <button type="button" class="clear-btn" onclick="clearsignaturePad()">Clear</button>
                 </td>
             </tr>
             <tr>
                 <td class="ack-label">Name:</td>
-                <td><input id="ackName" type="text"></td>
+                <td><input id="ackName" type="text"><span class="pdf-display-val"></span></td>
             </tr>
             <tr>
                 <td class="ack-label">Designation:</td>
-                <td><input id="designation" type="text"></td>
+                <td><input id="designation" type="text"><span class="pdf-display-val"></span></td>
             </tr>
             <tr>
                 <td class="ack-label">Date:</td>
-                <td><input id="ackDate" type="date"></td>
+                <td><input id="ackDate" type="date"><span class="pdf-display-val"></span></td>
             </tr>
         </table>
     </div>
 
     <div class="buttons">
-        <button class="submit-btn" type="button" onclick="submitForm()">Share / Save PDF</button>
+        <button class="submit-btn" type="button" onclick="submitForm()">Generate PDF &amp; Upload to Server</button>
     </div>
     <div id="status" class="status"></div>
 </div>
@@ -520,16 +566,16 @@ textarea { resize: vertical; }
 <script>
 function setupSignaturePad() {
     const canvas = document.getElementById("signaturePad");
-    const ratio = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * ratio;
-    canvas.height = rect.height * ratio;
-
     const ctx = canvas.getContext("2d");
-    ctx.scale(ratio, ratio);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width || 300;
+    canvas.height = rect.height || 65;
+
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.strokeStyle = "#111";
+
     let drawing = false;
 
     function pos(e) {
@@ -564,6 +610,32 @@ function clearsignaturePad() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function syncInputsForPdf() {
+    document.querySelectorAll("td, div").forEach(container => {
+        const input = container.querySelector("input[type='text'], input[type='date'], input[type='datetime-local'], textarea");
+        const pdfSpan = container.querySelector(".pdf-display-val");
+        if (input && pdfSpan) {
+            pdfSpan.textContent = input.value || "";
+        }
+    });
+
+    const generalRemarks = document.getElementById("generalRemarks");
+    const generalSpan = generalRemarks ? generalRemarks.nextElementSibling : null;
+    if (generalRemarks && generalSpan && generalSpan.classList.contains("pdf-display-val")) {
+        generalSpan.textContent = generalRemarks.value || "";
+    }
+
+    const canvas = document.getElementById("signaturePad");
+    const img = document.getElementById("signatureImg");
+    if (canvas && img) {
+        try {
+            img.src = canvas.toDataURL("image/png");
+        } catch (e) {
+            console.error("Signature export failed:", e);
+        }
+    }
+}
+
 async function submitForm() {
     const required = document.querySelectorAll("[required]");
     let ok = true;
@@ -584,7 +656,9 @@ async function submitForm() {
 
     const button = document.querySelector(".submit-btn");
     button.disabled = true;
-    button.textContent = "Generating PDF...";
+    button.textContent = "Generating PDF & Uploading...";
+
+    const PCLOUD_UPLOAD_CODE = "fMxXZ64gI7pdIgwRO7tB5HNpmJVkh4sQV";
 
     const company = document.getElementById("company").value.trim();
     const project = document.getElementById("project").value.trim();
@@ -592,49 +666,62 @@ async function submitForm() {
     const dateTime = document.getElementById("dateTime").value;
 
     const datePart = dateTime ? dateTime.substring(0, 10) : new Date().toISOString().substring(0, 10);
-    const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
-    const filename = `Weekly_Scaffold_Checklist_${safe(company) || "Company"}_${safe(project) || "Project"}_${safe(location) || "Location"}_${datePart}.pdf`;
 
+    const safe = value => value.replace(/[\\/:*?"<>|#%{}]/g, "_").replace(/\s+/g, "_").replace(/_+/g, "_");
+
+    const filename = `Weekly_Scaffold_Checklist_${safe(company) || "Company"}_${safe(project) || "Project"}_${safe(location) || "Location"}_${datePart}.pdf`;
     const page = document.getElementById("pdf-content");
-    const hideElements = document.querySelectorAll(".buttons, .status, .clear-btn");
-    hideElements.forEach(el => el.style.display = "none");
 
     try {
-        const worker = html2pdf()
+        window.scrollTo(0, 0);
+
+        syncInputsForPdf();
+        document.body.classList.add("pdf-generating");
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+
+        const pdfBlob = await html2pdf()
             .set({
                 margin: [5, 5, 5, 5],
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollY: 0 },
+                filename: filename,
+                image: { type: "jpeg", quality: 0.95 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    backgroundColor: "#ffffff", 
+                    scrollY: 0,
+                    scrollX: 0,
+                    windowWidth: 1024
+                },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             })
-            .from(page);
+            .from(page)
+            .outputPdf("blob");
 
-        const pdfBlob = await worker.output('blob');
-        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+        const formData = new FormData();
+        formData.append("code", PCLOUD_UPLOAD_CODE);
+        formData.append("filename", filename);
+        formData.append("names", filename);
+        formData.append("nopartial", "1");
+        formData.append("file", pdfBlob, filename);
 
-        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-            await navigator.share({
-                title: 'Weekly Scaffold Checklist',
-                text: 'Attached is the completed Weekly Scaffold Checklist PDF.',
-                files: [pdfFile]
-            });
-            status.textContent = "✓ PDF shared successfully.";
+        const response = await fetch("https://api.pcloud.com/uploadtolink", { method: "POST", body: formData });
+        const result = await response.json();
+
+        if (result.result === 0) {
+            status.textContent = "✓ PDF uploaded successfully to Server.";
             status.style.color = "#176b35";
         } else {
-            html2pdf().set({ filename: filename }).from(page).save();
-            status.textContent = "✓ Web Share not supported. PDF downloaded to local drive.";
-            status.style.color = "#176b35";
+            throw new Error(`Upload failed code: ${result.result}`);
         }
     } catch (error) {
-        if (error.name !== 'AbortError') {
-            status.textContent = "Error: " + error.message;
-            status.style.color = "#b42318";
-        }
+        status.textContent = "Error: " + error.message;
+        status.style.color = "#b42318";
     } finally {
-        hideElements.forEach(el => el.style.display = "");
+        document.body.classList.remove("pdf-generating");
         button.disabled = false;
-        button.textContent = "Share / Save PDF";
+        button.textContent = "Generate PDF & Upload to Server";
     }
 }
 
